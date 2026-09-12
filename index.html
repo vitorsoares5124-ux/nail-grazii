@@ -21,6 +21,12 @@
       --accent-blush:  #E8A9BF;
       --accent-dark:   #211324;
       
+      --btn-primary-bg:    #211324;
+      --btn-primary-text:  #FFFFFF;
+      --btn-primary-hover: #74467E;
+      --heading-color:     #211324;
+      --heading-highlight: #74467E;
+
       --text-main:     #211324;
       --text-muted:    #5C455F;
       --text-light:    #8E7991;
@@ -64,6 +70,7 @@
       font-weight: 600;
       letter-spacing: -0.01em;
       line-height: 1.2;
+      color: var(--heading-color, var(--accent-dark));
     }
 
     .meta-tag {
@@ -172,19 +179,19 @@
     }
 
     .btn-primary {
-      background: var(--accent-dark);
-      color: #FFFFFF;
+      background: var(--btn-primary-bg, var(--accent-dark));
+      color: var(--btn-primary-text, #FFFFFF);
       box-shadow: 0 4px 16px rgba(33, 19, 36, 0.15);
     }
     .btn-primary:hover {
-      background: var(--accent-mauve);
+      background: var(--btn-primary-hover, var(--accent-mauve));
       transform: translateY(-2px);
       box-shadow: 0 8px 22px rgba(116, 70, 126, 0.28);
     }
 
     .btn-outline {
       background: #FFFFFF;
-      color: var(--accent-dark);
+      color: var(--btn-primary-bg, var(--accent-dark));
       border-color: rgba(33, 19, 36, 0.2);
     }
     .btn-outline:hover {
@@ -235,13 +242,13 @@
 
     .hero-headline {
       font-size: clamp(2.6rem, 4.8vw, 4.4rem);
-      color: var(--accent-dark);
+      color: var(--heading-color, var(--accent-dark));
       margin-bottom: 1.3rem;
       font-weight: 600;
     }
     .hero-headline em {
       font-style: italic;
-      color: var(--accent-mauve);
+      color: var(--heading-highlight, var(--accent-mauve));
       font-weight: 500;
     }
 
@@ -377,7 +384,7 @@
 
     .about-title {
       font-size: clamp(2.1rem, 3.6vw, 3rem);
-      color: var(--accent-dark);
+      color: var(--heading-color, var(--accent-dark));
       margin-bottom: 1.2rem;
     }
     .about-text {
@@ -409,7 +416,7 @@
     .pillar-title {
       font-size: 0.95rem;
       font-weight: 700;
-      color: var(--accent-dark);
+      color: var(--heading-color, var(--accent-dark));
       margin-bottom: 0.3rem;
     }
     .pillar-desc {
@@ -426,7 +433,7 @@
     }
     .section-heading {
       font-size: clamp(2.2rem, 3.8vw, 3.2rem);
-      color: var(--accent-dark);
+      color: var(--heading-color, var(--accent-dark));
       margin-top: 0.5rem;
       margin-bottom: 0.8rem;
     }
@@ -2216,6 +2223,28 @@
       if (t) {
         root.style.setProperty('--text-main', t);
         root.style.setProperty('--accent-dark', t);
+      }
+
+      // Intensidade & Customização de Botões
+      const btnBg = cfg.cores.botaoBg || t || p;
+      if (btnBg) {
+        root.style.setProperty('--btn-primary-bg', btnBg);
+      }
+      if (cfg.cores.botaoTexto) {
+        root.style.setProperty('--btn-primary-text', cfg.cores.botaoTexto);
+      }
+      if (cfg.cores.botaoHover || p) {
+        root.style.setProperty('--btn-primary-hover', cfg.cores.botaoHover || p);
+      }
+
+      // Intensidade & Customização de Títulos
+      const tituloCor = cfg.cores.tituloCor || t;
+      if (tituloCor) {
+        root.style.setProperty('--heading-color', tituloCor);
+      }
+      const tituloDestaque = cfg.cores.tituloDestaque || p;
+      if (tituloDestaque) {
+        root.style.setProperty('--heading-highlight', tituloDestaque);
       }
     }
 

@@ -752,7 +752,7 @@
 
       <div class="color-grid">
         <div class="color-input-box">
-          <input type="color" id="corPrimaria" value="#74467E" onchange="atualizarHexDisplay('corPrimaria', 'hexPrimaria')" />
+          <input type="color" id="corPrimaria" value="#74467E" onchange="atualizarHexDisplay('corPrimaria', 'hexPrimaria'); atualizarEstilosDinamicos();" />
           <div class="color-meta">
             <span class="color-meta-label">Cor Primária</span>
             <span class="color-meta-val" id="hexPrimaria">#74467E</span>
@@ -760,7 +760,7 @@
         </div>
 
         <div class="color-input-box">
-          <input type="color" id="corSecundaria" value="#D98AA7" onchange="atualizarHexDisplay('corSecundaria', 'hexSecundaria')" />
+          <input type="color" id="corSecundaria" value="#D98AA7" onchange="atualizarHexDisplay('corSecundaria', 'hexSecundaria'); atualizarEstilosDinamicos();" />
           <div class="color-meta">
             <span class="color-meta-label">Cor Secundária</span>
             <span class="color-meta-val" id="hexSecundaria">#D98AA7</span>
@@ -768,7 +768,7 @@
         </div>
 
         <div class="color-input-box">
-          <input type="color" id="corDestaque" value="#E8A9BF" onchange="atualizarHexDisplay('corDestaque', 'hexDestaque')" />
+          <input type="color" id="corDestaque" value="#E8A9BF" onchange="atualizarHexDisplay('corDestaque', 'hexDestaque'); atualizarEstilosDinamicos();" />
           <div class="color-meta">
             <span class="color-meta-label">Destaques & Brilhos</span>
             <span class="color-meta-val" id="hexDestaque">#E8A9BF</span>
@@ -776,7 +776,7 @@
         </div>
 
         <div class="color-input-box">
-          <input type="color" id="corFundo" value="#FCFAFB" onchange="atualizarHexDisplay('corFundo', 'hexFundo')" />
+          <input type="color" id="corFundo" value="#FCFAFB" onchange="atualizarHexDisplay('corFundo', 'hexFundo'); atualizarEstilosDinamicos();" />
           <div class="color-meta">
             <span class="color-meta-label">Fundo do Site</span>
             <span class="color-meta-val" id="hexFundo">#FCFAFB</span>
@@ -784,10 +784,110 @@
         </div>
 
         <div class="color-input-box">
-          <input type="color" id="corTexto" value="#211324" onchange="atualizarHexDisplay('corTexto', 'hexTexto')" />
+          <input type="color" id="corTexto" value="#211324" onchange="atualizarHexDisplay('corTexto', 'hexTexto'); atualizarEstilosDinamicos();" />
           <div class="color-meta">
             <span class="color-meta-label">Texto Principal</span>
             <span class="color-meta-val" id="hexTexto">#211324</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── AJUSTES DE INTENSIDADE: BOTÕES E TÍTULOS ─── -->
+      <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#FFFFFF; margin-bottom:0.3rem;">
+          🎛️ Intensidade e Estilo dos Botões & Títulos
+        </h3>
+        <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:1.4rem;">
+          Escolha se deseja botões e títulos com tom mais escuro/marcante, na cor viva da paleta ou suaves.
+        </p>
+
+        <!-- Preview Box em Tempo Real no Painel -->
+        <div id="themeLivePreviewBox" style="background:#FCFAFB; border-radius:12px; padding:1.4rem; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div id="previewTitleDisplay" style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:700; color:#211324;">
+              Unhas com <em id="previewTitleEm" style="color:#74467E; font-style:italic;">Acabamento Perfeito</em>
+            </div>
+            <span style="font-size:0.82rem; color:#5C455F;">Pré-visualização do contraste do seu tema</span>
+          </div>
+          <button type="button" id="previewBtnDisplay" class="btn" style="background:#211324; color:#FFFFFF; border:none; padding:0.8rem 1.6rem; border-radius:50px; font-weight:700; font-size:0.88rem; cursor:default; box-shadow:0 4px 15px rgba(0,0,0,0.15);">
+            Agendar Horário →
+          </button>
+        </div>
+
+        <div class="form-grid">
+          <!-- CONTROLE DE BOTÕES -->
+          <div class="form-group">
+            <label>Intensidade do Botão Principal</label>
+            <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.6rem;">
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloBotao('escuro')">
+                ⚫ Escuro & Marcante
+              </button>
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloBotao('vibrante')">
+                💜 Cor Primária (Vibrante)
+              </button>
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloBotao('suave')">
+                🌸 Tom Secundário
+              </button>
+            </div>
+            <div class="color-input-box" style="margin-top:0.2rem;">
+              <input type="color" id="corBotaoBg" value="#211324" onchange="atualizarEstilosDinamicos(); atualizarHexDisplay('corBotaoBg', 'hexBotaoBg');" />
+              <div class="color-meta">
+                <span class="color-meta-label">Cor do Botão (Fundo)</span>
+                <span class="color-meta-val" id="hexBotaoBg">#211324</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COR DO TEXTO DO BOTÃO -->
+          <div class="form-group">
+            <label>Cor da Letra do Botão</label>
+            <div style="display:flex; gap:0.4rem; margin-bottom:0.6rem;">
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="document.getElementById('corBotaoTexto').value='#FFFFFF'; atualizarEstilosDinamicos(); atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');">
+                ⚪ Branco
+              </button>
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="document.getElementById('corBotaoTexto').value='#211324'; atualizarEstilosDinamicos(); atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');">
+                ⚫ Escuro
+              </button>
+            </div>
+            <div class="color-input-box" style="margin-top:0.2rem;">
+              <input type="color" id="corBotaoTexto" value="#FFFFFF" onchange="atualizarEstilosDinamicos(); atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');" />
+              <div class="color-meta">
+                <span class="color-meta-label">Cor da Letra do Botão</span>
+                <span class="color-meta-val" id="hexBotaoTexto">#FFFFFF</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTROLE DE TÍTULOS -->
+          <div class="form-group">
+            <label>Intensidade da Cor dos Títulos</label>
+            <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.6rem;">
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloTitulo('grafite')">
+                🖤 Grafite Editorial
+              </button>
+              <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloTitulo('paleta')">
+                🎨 Cor da Marca / Paleta
+              </button>
+            </div>
+            <div class="color-input-box" style="margin-top:0.2rem;">
+              <input type="color" id="corTitulo" value="#211324" onchange="atualizarEstilosDinamicos(); atualizarHexDisplay('corTitulo', 'hexTitulo');" />
+              <div class="color-meta">
+                <span class="color-meta-label">Cor dos Títulos (H1, H2)</span>
+                <span class="color-meta-val" id="hexTitulo">#211324</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DESTAQUE NOS TÍTULOS -->
+          <div class="form-group">
+            <label>Cor das Palavras em Destaque</label>
+            <div class="color-input-box" style="margin-top:1.85rem;">
+              <input type="color" id="corTituloDestaque" value="#74467E" onchange="atualizarEstilosDinamicos(); atualizarHexDisplay('corTituloDestaque', 'hexTituloDestaque');" />
+              <div class="color-meta">
+                <span class="color-meta-label">Destaque de Texto</span>
+                <span class="color-meta-val" id="hexTituloDestaque">#74467E</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -985,7 +1085,19 @@
 
     // Cores
     if (cfg.cores) {
-      aplicarPresetCores(cfg.cores.primaria, cfg.cores.secundaria, cfg.cores.destaque, cfg.cores.fundo, cfg.cores.texto);
+      aplicarPresetCores(
+        cfg.cores.primaria,
+        cfg.cores.secundaria,
+        cfg.cores.destaque,
+        cfg.cores.fundo,
+        cfg.cores.texto,
+        cfg.cores.botaoBg,
+        cfg.cores.botaoTexto,
+        cfg.cores.tituloCor,
+        cfg.cores.tituloDestaque
+      );
+    } else {
+      atualizarEstilosDinamicos();
     }
 
     // Serviços
@@ -1057,7 +1169,12 @@
         secundaria: document.getElementById('corSecundaria').value,
         destaque: document.getElementById('corDestaque').value,
         fundo: document.getElementById('corFundo').value,
-        texto: document.getElementById('corTexto').value
+        texto: document.getElementById('corTexto').value,
+        botaoBg: document.getElementById('corBotaoBg').value,
+        botaoTexto: document.getElementById('corBotaoTexto').value,
+        botaoHover: document.getElementById('corPrimaria').value,
+        tituloCor: document.getElementById('corTitulo').value,
+        tituloDestaque: document.getElementById('corTituloDestaque').value
       },
       servicos,
       portfolio,
@@ -1304,22 +1421,98 @@
     }, document.querySelectorAll('#faqContainer .dynamic-item-card').length));
   }
 
-  /* ─── CORES HELPERS ─── */
-  function aplicarPresetCores(prim, sec, dest, fundo, texto) {
+  /* ─── CORES HELPERS & INTENSIDADE ─── */
+  function aplicarPresetCores(prim, sec, dest, fundo, texto, botaoBg, botaoTexto, tituloCor, tituloDestaque) {
     document.getElementById('corPrimaria').value = prim;
     document.getElementById('corSecundaria').value = sec;
     document.getElementById('corDestaque').value = dest;
     document.getElementById('corFundo').value = fundo;
     document.getElementById('corTexto').value = texto;
 
+    // Se botaoBg/tituloCor não foram passados, infere os melhores contrastes
+    document.getElementById('corBotaoBg').value = botaoBg || texto || '#211324';
+    document.getElementById('corBotaoTexto').value = botaoTexto || '#FFFFFF';
+    document.getElementById('corTitulo').value = tituloCor || texto || '#211324';
+    document.getElementById('corTituloDestaque').value = tituloDestaque || prim || '#74467E';
+
     atualizarHexDisplay('corPrimaria', 'hexPrimaria');
     atualizarHexDisplay('corSecundaria', 'hexSecundaria');
     atualizarHexDisplay('corDestaque', 'hexDestaque');
     atualizarHexDisplay('corFundo', 'hexFundo');
     atualizarHexDisplay('corTexto', 'hexTexto');
+    atualizarHexDisplay('corBotaoBg', 'hexBotaoBg');
+    atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');
+    atualizarHexDisplay('corTitulo', 'hexTitulo');
+    atualizarHexDisplay('corTituloDestaque', 'hexTituloDestaque');
+
+    atualizarEstilosDinamicos();
   }
+
+  function ajustarEstiloBotao(tipo) {
+    const corPrim = document.getElementById('corPrimaria').value;
+    const corSec = document.getElementById('corSecundaria').value;
+    const corTxt = document.getElementById('corTexto').value;
+
+    if (tipo === 'escuro') {
+      document.getElementById('corBotaoBg').value = corTxt;
+      document.getElementById('corBotaoTexto').value = '#FFFFFF';
+    } else if (tipo === 'vibrante') {
+      document.getElementById('corBotaoBg').value = corPrim;
+      document.getElementById('corBotaoTexto').value = '#FFFFFF';
+    } else if (tipo === 'suave') {
+      document.getElementById('corBotaoBg').value = corSec;
+      document.getElementById('corBotaoTexto').value = '#211324';
+    }
+
+    atualizarHexDisplay('corBotaoBg', 'hexBotaoBg');
+    atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');
+    atualizarEstilosDinamicos();
+  }
+
+  function ajustarEstiloTitulo(tipo) {
+    const corPrim = document.getElementById('corPrimaria').value;
+    const corTxt = document.getElementById('corTexto').value;
+
+    if (tipo === 'grafite') {
+      document.getElementById('corTitulo').value = corTxt;
+    } else if (tipo === 'paleta') {
+      document.getElementById('corTitulo').value = corPrim;
+    }
+
+    atualizarHexDisplay('corTitulo', 'hexTitulo');
+    atualizarEstilosDinamicos();
+  }
+
+  function atualizarEstilosDinamicos() {
+    const f = document.getElementById('corFundo').value;
+    const btnBg = document.getElementById('corBotaoBg').value;
+    const btnTxt = document.getElementById('corBotaoTexto').value;
+    const titCor = document.getElementById('corTitulo').value;
+    const titDest = document.getElementById('corTituloDestaque').value;
+
+    // Atualiza o preview box
+    const box = document.getElementById('themeLivePreviewBox');
+    if (box) box.style.background = f;
+
+    const tit = document.getElementById('previewTitleDisplay');
+    if (tit) tit.style.color = titCor;
+
+    const titEm = document.getElementById('previewTitleEm');
+    if (titEm) titEm.style.color = titDest;
+
+    const btn = document.getElementById('previewBtnDisplay');
+    if (btn) {
+      btn.style.background = btnBg;
+      btn.style.color = btnTxt;
+    }
+  }
+
   function atualizarHexDisplay(inputId, spanId) {
-    document.getElementById(spanId).textContent = document.getElementById(inputId).value.toUpperCase();
+    const el = document.getElementById(inputId);
+    const span = document.getElementById(spanId);
+    if (el && span) {
+      span.textContent = el.value.toUpperCase();
+    }
   }
 
   /* ─── NAVEGAÇÃO DE ABAS ─── */
