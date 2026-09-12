@@ -1877,7 +1877,7 @@
             <div class="summary-item-icon">✨</div>
             <div class="summary-item-texts">
               <span class="summary-item-label">Profissional</span>
-              <span class="summary-item-value">Graziele (@nail_grazii)</span>
+              <span class="summary-item-value" id="sumProfessional">Graziele (@nail_grazii)</span>
             </div>
           </div>
         </div>
@@ -1887,8 +1887,8 @@
           <input type="text" id="clientNameInput" class="form-input" placeholder="Ex: Mariana Silva" />
         </div>
 
-        <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:1.5rem; line-height:1.5;">
-          Ao clicar abaixo, você vai direto para o WhatsApp da Graziele com a mensagem prontinha só para enviar! 💕
+        <p id="sumWhatsNotice" style="font-size:0.86rem; color:var(--text-muted); margin-bottom:1.5rem; line-height:1.5;">
+          Ao clicar abaixo, você vai direto para o WhatsApp da <strong>Graziele</strong> com a mensagem prontinha só para enviar! 💕
         </p>
 
         <div class="modal-actions" style="flex-direction:column;">
@@ -2099,9 +2099,16 @@
     }
 
     if (stepNum === 3) {
+      const prof = window.CURRENT_PROFILE || { nome: "Graziele", insta: "nail_grazii" };
       document.getElementById('sumService').textContent = chosenService;
       document.getElementById('sumDate').textContent = `${dayNamesPtFull[chosenDate.getDay()]}, ${chosenDate.getDate()} de ${monthNamesPt[chosenDate.getMonth()]} de ${chosenDate.getFullYear()}`;
       document.getElementById('sumTime').textContent = chosenSlot;
+      
+      const sumProf = document.getElementById('sumProfessional');
+      if (sumProf) sumProf.textContent = `${prof.nome} (@${prof.insta})`;
+      
+      const sumNotice = document.getElementById('sumWhatsNotice');
+      if (sumNotice) sumNotice.innerHTML = `Ao clicar abaixo, você vai direto para o WhatsApp da <strong>${prof.nome}</strong> com a mensagem prontinha só para enviar! 💕`;
     }
 
     document.querySelector('.booking-window').scrollTop = 0;
@@ -2261,6 +2268,12 @@
 
     const badgeSub = document.querySelector('.badge-subtitle');
     if (badgeSub) badgeSub.textContent = subtitulo;
+
+    const sumProf = document.getElementById('sumProfessional');
+    if (sumProf) sumProf.textContent = `${nome} (@${insta})`;
+
+    const sumNotice = document.getElementById('sumWhatsNotice');
+    if (sumNotice) sumNotice.innerHTML = `Ao clicar abaixo, você vai direto para o WhatsApp da <strong>${nome}</strong> com a mensagem prontinha só para enviar! 💕`;
 
     // 3. Foto de Perfil (Suporta Base64, link e caminho)
     const profileImg = document.querySelector('.hero-image-inner img');
