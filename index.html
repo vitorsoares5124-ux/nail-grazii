@@ -2161,31 +2161,62 @@
 <!-- ─── CARREGAMENTO DE CONFIGURAÇÃO E PARÂMETROS DINÂMICOS ─── -->
 <script src="config.js"></script>
 <script>
-  // ─── ENGINE DINÂMICO COMPLETO (CONFIG.JS + URL PARAMETERS) ───
+  // ─── ENGINE DINÂMICO COMPLETO (CONFIG.JS + PREVIEW LIVE + URL PARAMETERS) ───
   (function initDynamicProfile() {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // Suporte tanto para o formato novo (SITE_CONFIG.dados) quanto para legado
-    const cfg = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {};
+    // Suporte para config.js, live preview do painel e URL parameters
+    let cfg = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {};
+    
+    // Se estiver em modo de teste vindo do painel admin.html
+    if (urlParams.get('preview') === 'live') {
+      try {
+        const liveCfg = localStorage.getItem('NAIL_LIVE_PREVIEW_CONFIG');
+        if (liveCfg) {
+          cfg = JSON.parse(liveCfg);
+        }
+      } catch (e) {
+        console.warn('Preview fallback:', e);
+      }
+    }
+
     const d = cfg.dados || cfg || {};
 
     const nome = urlParams.get('nome') || d.nome || "Graziele";
     const whats = urlParams.get('whats') || d.whatsapp || "5515997949066";
     const insta = urlParams.get('insta') || d.instagram || "nail_grazii";
     const foto = urlParams.get('foto') || d.fotoPerfil || "assets/images/graziele_perfil.jpg";
-    const subtitulo = d.subtitulo || "Nail Designer Especialista";
+    const subtitulo = urlParams.get('subtitulo') || d.subtitulo || "Nail Designer Especialista";
     const cidade = d.cidade || "Atendimento com hora marcada";
 
     window.CURRENT_PROFILE = { nome, whats, insta, foto, subtitulo, cidade };
 
-    // 1. Aplicação Dinâmica de Cores (se existirem no config.js)
+    // 1. Aplicação Dinâmica de Cores
     if (cfg.cores) {
       const root = document.documentElement;
-      if (cfg.cores.primaria) root.style.setProperty('--accent-mauve', cfg.cores.primaria);
-      if (cfg.cores.secundaria) root.style.setProperty('--accent-rose', cfg.cores.secundaria);
-      if (cfg.cores.destaque) root.style.setProperty('--accent-blush', cfg.cores.destaque);
-      if (cfg.cores.fundo) root.style.setProperty('--bg-main', cfg.cores.fundo);
-      if (cfg.cores.texto) root.style.setProperty('--text-main', cfg.cores.texto);
+      const p = cfg.cores.primaria;
+      const s = cfg.cores.secundaria;
+      const dest = cfg.cores.destaque;
+      const f = cfg.cores.fundo;
+      const t = cfg.cores.texto;
+
+      if (p) {
+        root.style.setProperty('--accent-mauve', p);
+        root.style.setProperty('--accent-lilac', p);
+      }
+      if (s) {
+        root.style.setProperty('--accent-rose', s);
+      }
+      if (dest) {
+        root.style.setProperty('--accent-blush', dest);
+      }
+      if (f) {
+        root.style.setProperty('--bg-main', f);
+      }
+      if (t) {
+        root.style.setProperty('--text-main', t);
+        root.style.setProperty('--accent-dark', t);
+      }
     }
 
     // 2. Textos Básicos, Cabeçalho e Hero
@@ -2202,11 +2233,11 @@
     const badgeSub = document.querySelector('.badge-subtitle');
     if (badgeSub) badgeSub.textContent = subtitulo;
 
-    // 3. Foto de Perfil
+    // 3. Foto de Perfil (Suporta Base64, link e caminho)
     const profileImg = document.querySelector('.hero-image-inner img');
     if (profileImg && foto) {
       profileImg.src = foto;
-      profileImg.alt = `${nome} — Nail Designer`;
+      profileImg.alt = `${nome} — ${subtitulo}`;
     }
 
     // 4. Links do Instagram
@@ -2217,7 +2248,7 @@
       }
     });
 
-    // 5. Renderização Dinâmica de Serviços (se definidos no config.js)
+    // 5. Renderização Dinâmica de Serviços
     if (Array.isArray(cfg.servicos) && cfg.servicos.length > 0) {
       const menuGrid = document.querySelector('.menu-grid');
       const choiceList = document.querySelector('.services-choice-list');
@@ -2263,7 +2294,7 @@
       }
     }
 
-    // 6. Renderização Dinâmica de Portfólio (se definido no config.js)
+    // 6. Renderização Dinâmica de Portfólio
     if (Array.isArray(cfg.portfolio) && cfg.portfolio.length > 0) {
       const galGrid = document.getElementById('galleryGrid');
       if (galGrid) {
@@ -2284,7 +2315,7 @@
       }
     }
 
-    // 7. Renderização Dinâmica de Depoimentos (se definidos no config.js)
+    // 7. Renderização Dinâmica de Depoimentos
     if (Array.isArray(cfg.depoimentos) && cfg.depoimentos.length > 0) {
       const vGrid = document.querySelector('.voices-grid');
       if (vGrid) {
@@ -2310,7 +2341,7 @@
       }
     }
 
-    // 8. Renderização Dinâmica de FAQ (se definido no config.js)
+    // 8. Renderização Dinâmica de FAQ
     if (Array.isArray(cfg.faq) && cfg.faq.length > 0) {
       const faqCont = document.querySelector('.faq-container');
       if (faqCont) {
@@ -2332,7 +2363,7 @@
     }
 
     // 9. Atualiza o Título da Aba
-    document.title = `${nome} Nail Designer 💅 | Unhas em Gel e Fibra`;
+    document.title = `${nome} — ${subtitulo} 💅 | Unhas em Gel e Fibra`;
   })();
 
   /* ── ENVIO WHATSAPP COM NÚMERO DINÂMICO ── */
