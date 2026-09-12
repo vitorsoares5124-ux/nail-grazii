@@ -592,6 +592,7 @@
 <header class="top-header">
   <div class="brand-logo">
     <span>💅 Painel Nail Designer</span>
+    <button type="button" onclick="resetarPainelCompleto()" style="background:none; border:none; font-size:0.7rem; color:var(--text-muted); cursor:pointer; opacity:0.6;" title="Redefinir painel para o padrão de fábrica se algo travar">🔄 Reset</button>
   </div>
 
   <div class="header-actions">
@@ -1141,36 +1142,62 @@
 
   /* ─── INICIALIZAÇÃO DE PERFIS ─── */
   function initProfiles() {
-    let saved = localStorage.getItem('NAIL_SAVED_PROFILES');
-    let profiles = {};
-    if (!saved) {
-      profiles = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
-      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
-    } else {
-      profiles = JSON.parse(saved);
-      // Garante que novos perfis padrão (como Sara) sejam adicionados se ainda não constarem
-      Object.keys(DEFAULT_PROFILES).forEach(k => {
-        if (!profiles[k]) {
-          profiles[k] = JSON.parse(JSON.stringify(DEFAULT_PROFILES[k]));
-        }
-      });
-      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
-    }
-    renderProfileSelectOptions();
+    try {
+      let saved = localStorage.getItem('NAIL_SAVED_PROFILES');
+      let profiles = {};
+      try {
+        profiles = saved ? JSON.parse(saved) : {};
+      } catch(e) {
+        profiles = {};
+      }
+      
+      if (!profiles || typeof profiles !== 'object' || Object.keys(profiles).length === 0) {
+        profiles = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+        localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+      } else {
+        // Garante que novos perfis padrão (como Sara) sejam adicionados se ainda não constarem
+        Object.keys(DEFAULT_PROFILES).forEach(k => {
+          if (!profiles[k]) {
+            profiles[k] = JSON.parse(JSON.stringify(DEFAULT_PROFILES[k]));
+          }
+        });
+        localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+      }
+      
+      renderProfileSelectOptions();
 
-    // Restaura o último perfil ativo (salvo em NAIL_ACTIVE_PROFILE_KEY)
-    profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
-    const lastKey = localStorage.getItem('NAIL_ACTIVE_PROFILE_KEY');
-    const keyToLoad = (lastKey && profiles[lastKey]) ? lastKey : Object.keys(profiles)[0] || 'graziele';
-    currentActiveKey = keyToLoad;
-    document.getElementById('profileSelector').value = keyToLoad;
-    carregarPerfilParaFormulario(profiles[keyToLoad]);
+      // Restaura o último perfil ativo (salvo em NAIL_ACTIVE_PROFILE_KEY)
+      const lastKey = localStorage.getItem('NAIL_ACTIVE_PROFILE_KEY');
+      const keyToLoad = (lastKey && profiles[lastKey]) ? lastKey : Object.keys(profiles)[0] || 'graziele';
+      currentActiveKey = keyToLoad;
+      
+      const sel = document.getElementById('profileSelector');
+      if (sel) sel.value = keyToLoad;
+      
+      if (profiles[keyToLoad]) {
+        carregarPerfilParaFormulario(profiles[keyToLoad]);
+      } else if (DEFAULT_PROFILES.graziele) {
+        carregarPerfilParaFormulario(DEFAULT_PROFILES.graziele);
+      }
+    } catch (err) {
+      console.error('Erro ao inicializar perfis:', err);
+      // Fallback de emergência em caso de dados corrompidos
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(DEFAULT_PROFILES));
+      renderProfileSelectOptions();
+      if (DEFAULT_PROFILES.graziele) carregarPerfilParaFormulario(DEFAULT_PROFILES.graziele);
+    }
   }
 
   function renderProfileSelectOptions() {
     const selector = document.getElementById('profileSelector');
+    if (!selector) return;
     selector.innerHTML = '';
-    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    let profiles = {};
+    try {
+      profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    } catch(e) {
+      profiles = DEFAULT_PROFILES;
+    }
     Object.keys(profiles).forEach(key => {
       const opt = document.createElement('option');
       opt.value = key;
@@ -1817,13 +1844,21 @@
     }, 600);
   });
 
-  // Autosave: salva o estado atual do formulário antes de qualquer refresh ou saída
-  window.addEventListener('beforeunload', () => {
-    salvarPerfilSilencioso();
-  });
+  function resetarPainelCompleto() {
+    if (confirm("Deseja restaurar as configurações padrão do painel?")) {
+      localStorage.removeItem('NAIL_SAVED_PROFILES');
+      localStorage.removeItem('NAIL_ACTIVE_PROFILE_KEY');
+      localStorage.removeItem('NAIL_LIVE_PREVIEW_CONFIG');
+      location.reload();
+    }
+  }
 
-  // Inicializa ao carregar
-  window.addEventListener('DOMContentLoaded', initProfiles);
+  // Inicializa ao carregar com garantia dupla
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initProfiles);
+  } else {
+    initProfiles();
+  }
 </script>
 
 </body>
