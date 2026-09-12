@@ -2157,19 +2157,86 @@
     document.getElementById('modalStepHeading').textContent = 'Qual serviço você quer?';
   }
 
-  /* ── ENVIO WHATSAPP ── */
+<!-- ─── CARREGAMENTO DE CONFIGURAÇÃO E PARÂMETROS DINÂMICOS ─── -->
+<script src="config.js"></script>
+<script>
+  // ─── ENGINE DINÂMICO PARA PROSPECÇÃO (URL PARAMETERS + CONFIG.JS) ───
+  (function initDynamicProfile() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Objeto padrão
+    const defaults = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {
+      nome: "Graziele",
+      subtitulo: "Nail Designer Especialista",
+      whatsapp: "5515997949066",
+      instagram: "nail_grazii",
+      fotoPerfil: "assets/images/graziele_perfil.jpg"
+    };
+
+    // Lê parâmetros da URL se existirem (ex: ?nome=Camila&whats=11999998888&insta=camilanails)
+    const nome = urlParams.get('nome') || defaults.nome;
+    const whats = urlParams.get('whats') || defaults.whatsapp;
+    const insta = urlParams.get('insta') || defaults.instagram;
+    const foto = urlParams.get('foto') || defaults.fotoPerfil;
+
+    // Atualiza o estado global
+    window.CURRENT_PROFILE = { nome, whats, insta, foto };
+
+    // 1. Atualiza Nome e Marca
+    document.querySelectorAll('.brand-title').forEach(el => el.textContent = nome);
+    const heroTitle = document.querySelector('.hero-headline');
+    if (heroTitle) {
+      heroTitle.innerHTML = `Unhas perfeitas com o <em>cuidado</em> que você merece.`;
+    }
+    const heroDesc = document.querySelector('.hero-description');
+    if (heroDesc) {
+      heroDesc.innerHTML = `Olá! Sou a <strong>${nome}</strong>. Faço alongamento em fibra, gel e decorações com acabamento fininho, natural e que dura semanas sem quebrar ou descolar.`;
+    }
+    const badgeTitle = document.querySelector('.badge-title');
+    if (badgeTitle) badgeTitle.textContent = nome;
+
+    // 2. Atualiza Foto de Perfil se especificada
+    const profileImg = document.querySelector('.hero-image-inner img');
+    if (profileImg && foto) {
+      profileImg.src = foto;
+      profileImg.alt = `${nome} — Nail Designer`;
+    }
+
+    // 3. Atualiza Links do Instagram
+    document.querySelectorAll('a[href*="instagram.com"]').forEach(link => {
+      link.href = `https://www.instagram.com/${insta}/`;
+      if (link.textContent.includes('@')) {
+        link.textContent = `Instagram (@${insta})`;
+      }
+    });
+
+    // 4. Atualiza Profissional no Resumo do Modal
+    const sumProf = document.querySelectorAll('.summary-item-value');
+    if (sumProf.length >= 4) {
+      sumProf[3].textContent = `${nome} (@${insta})`;
+    }
+
+    // 5. Atualiza o Título da Página
+    document.title = `${nome} Nail Designer 💅 | Unhas em Gel e Fibra`;
+  })();
+
+  /* ── ENVIO WHATSAPP COM NÚMERO DINÂMICO ── */
   function dispatchWhatsAppBooking() {
+    const prof = window.CURRENT_PROFILE || { nome: "Graziele", whats: "5515997949066" };
     const clientName = document.getElementById('clientNameInput').value.trim();
     const formattedDate = `${dayNamesPtFull[chosenDate.getDay()]}, ${chosenDate.getDate()} de ${monthNamesPt[chosenDate.getMonth()]} de ${chosenDate.getFullYear()}`;
 
-    let message = `Olá Graziele! Gostaria de agendar um horário pelo seu site:\n\n`;
+    let message = `Olá ${prof.nome}! Gostaria de agendar um horário pelo seu site:\n\n`;
     if (clientName) message += `👤 *Meu nome:* ${clientName}\n`;
     message += `💅 *Serviço:* ${chosenService}\n`;
     message += `📅 *Dia:* ${formattedDate}\n`;
     message += `⏰ *Horário:* ${chosenSlot}\n\n`;
     message += `Você pode confirmar se esse horário está livre? Muito obrigada! 😊`;
 
-    const whatsappUrl = `https://wa.me/5515997949066?text=${encodeURIComponent(message)}`;
+    const cleanNumber = prof.whats.replace(/\D/g, '');
+    const finalNumber = cleanNumber.startsWith('55') ? cleanNumber : `55${cleanNumber}`;
+
+    const whatsappUrl = `https://wa.me/${finalNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     closeBookingModal();
   }
