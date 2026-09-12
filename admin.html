@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Visual de Controle | Sites para Nail Designers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #120A16;
+      --card-bg: #1C1122;
+      --card-sub: #27192F;
+      --accent: #D98AA7;
+      --accent-purple: #8E6297;
+      --text: #FFFFFF;
+      --text-muted: #BBA8C0;
+      --border: rgba(255, 255, 255, 0.1);
+      --border-focus: #D98AA7;
+      --radius: 14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── TOP BAR ─── */
+    .top-header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Profile Selector Dropdown */
+    .profile-switch-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-sub);
+      padding: 0.4rem 0.8rem;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+    }
+    .profile-switch-label {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .profile-select {
+      background: transparent;
+      border: none;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      outline: none;
+    }
+    .profile-select option {
+      background: #1C1122;
+      color: #FFFFFF;
+    }
+
+    .btn-top {
+      padding: 0.65rem 1.3rem;
+      border-radius: 50px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-preview {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+      border: 1px solid var(--border);
+    }
+    .btn-preview:hover { background: rgba(255, 255, 255, 0.2); }
+    .btn-save-main {
+      background: linear-gradient(135deg, #D98AA7 0%, #8E6297 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 15px rgba(217, 138, 167, 0.35);
+    }
+    .btn-save-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(217, 138, 167, 0.5);
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      flex-grow: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    /* ─── SIDE NAV TABS ─── */
+    .side-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .nav-tab-btn {
+      padding: 1rem 1.2rem;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .nav-tab-btn:hover {
+      background: var(--card-bg);
+      color: #FFFFFF;
+    }
+    .nav-tab-btn.active {
+      background: var(--card-bg);
+      border-color: var(--border);
+      color: var(--accent);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .nav-tab-icon { font-size: 1.2rem; }
+
+    /* ─── CONTENT PANELS ─── */
+    .content-area {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .panel-section { display: none; }
+    .panel-section.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 0.3rem;
+    }
+    .section-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ─── FORM CONTROLS ─── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.3rem;
+    }
+    .full-width { grid-column: span 2; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+    input[type="text"], textarea, select {
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 85px;
+    }
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      background: #2D1D36;
+    }
+
+    /* ─── COLOR PICKERS ─── */
+    .preset-colors-row {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .preset-pill {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .preset-pill:hover { border-color: var(--accent); }
+    .preset-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+    .color-input-box {
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    input[type="color"] {
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: none;
+    }
+    .color-meta {
+      display: flex;
+      flex-direction: column;
+    }
+    .color-meta-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+    .color-meta-val { font-size: 0.95rem; font-weight: 700; color: #FFFFFF; }
+
+    /* ─── DYNAMIC ITEM CARDS (SERVICES, FAQ, REVIEWS) ─── */
+    .items-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .dynamic-item-card {
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.3rem;
+      position: relative;
+    }
+    .item-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .item-card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .btn-remove-item {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-remove-item:hover {
+      background: #EF4444;
+      color: #FFFFFF;
+    }
+
+    .btn-add-item {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      color: #FFFFFF;
+      width: 100%;
+      padding: 0.95rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .btn-add-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ─── OUTPUT MODAL / DIALOG ─── */
+    .code-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .code-modal-overlay.active { display: flex; }
+    .code-modal {
+      background: #190F1E;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 780px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    }
+    .code-box {
+      background: #0A050D;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #79FFA8;
+      overflow-y: auto;
+      flex-grow: 1;
+      margin: 1.2rem 0;
+      white-space: pre;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .main-layout { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: span 1; }
+      .color-grid { grid-template-columns: 1fr; }
+      .side-nav { flex-direction: row; overflow-x: auto; padding-bottom: 0.5rem; }
+      .nav-tab-btn { white-space: nowrap; padding: 0.7rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── TOP HEADER ─── -->
+<header class="top-header">
+  <div class="brand-logo">
+    <span>💅</span>
+    <span>Painel Visual de Configuração</span>
+  </div>
+
+  <div class="header-actions">
+    <!-- Seletor de Perfis Salvos -->
+    <div class="profile-switch-wrap">
+      <span class="profile-switch-label">Perfil:</span>
+      <select class="profile-select" id="profileSelector" onchange="onProfileChange(this.value)">
+        <option value="graziele">Graziele (Padrão)</option>
+        <option value="camila">Camila (Exemplo)</option>
+      </select>
+    </div>
+
+    <button class="btn-top btn-preview" onclick="salvarNovoPerfilModal()">➕ Novo Perfil</button>
+    <button class="btn-top btn-preview" onclick="visualizarSiteLive()">👁️ Testar Site</button>
+    <button class="btn-top btn-save-main" onclick="gerarCodigoConfig()">💾 Salvar & Baixar config.js</button>
+  </div>
+</header>
+
+<!-- ─── MAIN CONTAINER ─── -->
+<div class="main-layout">
+  <!-- Navegação Lateral -->
+  <aside class="side-nav">
+    <button class="nav-tab-btn active" onclick="switchTab('tabDados', this)">
+      <span class="nav-tab-icon">👤</span>
+      <span>Profissional</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('tabCores', this)">
+      <span class="nav-tab-icon">🎨</span>
+      <span>Cores & Tema</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('tabServicos', this)">
+      <span class="nav-tab-icon">💅</span>
+      <span>Serviços & Preços</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('tabPortfolio', this)">
+      <span class="nav-tab-icon">📸</span>
+      <span>Portfólio</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('tabDepoimentos', this)">
+      <span class="nav-tab-icon">💬</span>
+      <span>Depoimentos</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('tabFaq', this)">
+      <span class="nav-tab-icon">❓</span>
+      <span>Dúvidas (FAQ)</span>
+    </button>
+  </aside>
+
+  <!-- Área de Conteúdo / Abas -->
+  <main class="content-area">
+
+    <!-- ── TAB 1: DADOS BÁSICOS ── -->
+    <div class="panel-section active" id="tabDados">
+      <h2 class="section-title">Dados da Profissional</h2>
+      <p class="section-subtitle">Informações principais que aparecem na apresentação, rodapé e WhatsApp.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome da Profissional</label>
+          <input type="text" id="cfgNome" value="Graziele" />
+        </div>
+        <div class="form-group">
+          <label>Subtítulo / Especialidade</label>
+          <input type="text" id="cfgSubtitulo" value="Nail Designer Especialista" />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp (DDI + DDD + Número)</label>
+          <input type="text" id="cfgWhats" value="5515997949066" placeholder="Ex: 5515997949066" />
+        </div>
+        <div class="form-group">
+          <label>Instagram (sem @)</label>
+          <input type="text" id="cfgInsta" value="nail_grazii" placeholder="Ex: nail_grazii" />
+        </div>
+        <div class="form-group">
+          <label>Cidade / Estado</label>
+          <input type="text" id="cfgCidade" value="Sorocaba - SP" />
+        </div>
+        <div class="form-group">
+          <label>Foto de Perfil (Caminho ou URL)</label>
+          <input type="text" id="cfgFoto" value="assets/images/graziele_perfil.jpg" />
+        </div>
+        <div class="form-group full-width">
+          <label>Texto de Apresentação (Hero)</label>
+          <textarea id="cfgDescricaoHero">Faço alongamento em fibra, gel e decorações com acabamento fininho, natural e que dura semanas sem quebrar ou descolar.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 2: CORES & TEMA ── -->
+    <div class="panel-section" id="tabCores">
+      <h2 class="section-title">Paleta de Cores</h2>
+      <p class="section-subtitle">Personalize as cores do site com um clique ou escolha temas prontos.</p>
+
+      <!-- Presets Prontos -->
+      <label style="margin-bottom:0.6rem; display:block;">Temas Prontos:</label>
+      <div class="preset-colors-row">
+        <div class="preset-pill" onclick="aplicarPresetCores('#74467E', '#D98AA7', '#E8A9BF', '#FCFAFB', '#211324')">
+          <span class="preset-swatch" style="background:#74467E"></span>
+          <span>Lilás & Rosé (Padrão)</span>
+        </div>
+        <div class="preset-pill" onclick="aplicarPresetCores('#B3874B', '#D9A05B', '#F3D8AB', '#FCFAFB', '#1F1A14')">
+          <span class="preset-swatch" style="background:#B3874B"></span>
+          <span>Dourado & Champagne</span>
+        </div>
+        <div class="preset-pill" onclick="aplicarPresetCores('#C84B7A', '#E87A90', '#F7B7C6', '#FFF8FA', '#2B121C')">
+          <span class="preset-swatch" style="background:#C84B7A"></span>
+          <span>Rosa Chiclete / Barbie</span>
+        </div>
+        <div class="preset-pill" onclick="aplicarPresetCores('#4A6B6C', '#789D9E', '#B8D5D6', '#F7FAFA', '#162324')">
+          <span class="preset-swatch" style="background:#4A6B6C"></span>
+          <span>Verde Esmeralda / Tiffany</span>
+        </div>
+      </div>
+
+      <div class="color-grid">
+        <div class="color-input-box">
+          <input type="color" id="corPrimaria" value="#74467E" onchange="atualizarHexDisplay('corPrimaria', 'hexPrimaria')" />
+          <div class="color-meta">
+            <span class="color-meta-label">Cor Primária</span>
+            <span class="color-meta-val" id="hexPrimaria">#74467E</span>
+          </div>
+        </div>
+
+        <div class="color-input-box">
+          <input type="color" id="corSecundaria" value="#D98AA7" onchange="atualizarHexDisplay('corSecundaria', 'hexSecundaria')" />
+          <div class="color-meta">
+            <span class="color-meta-label">Cor Secundária</span>
+            <span class="color-meta-val" id="hexSecundaria">#D98AA7</span>
+          </div>
+        </div>
+
+        <div class="color-input-box">
+          <input type="color" id="corDestaque" value="#E8A9BF" onchange="atualizarHexDisplay('corDestaque', 'hexDestaque')" />
+          <div class="color-meta">
+            <span class="color-meta-label">Destaques & Brilhos</span>
+            <span class="color-meta-val" id="hexDestaque">#E8A9BF</span>
+          </div>
+        </div>
+
+        <div class="color-input-box">
+          <input type="color" id="corFundo" value="#FCFAFB" onchange="atualizarHexDisplay('corFundo', 'hexFundo')" />
+          <div class="color-meta">
+            <span class="color-meta-label">Fundo do Site</span>
+            <span class="color-meta-val" id="hexFundo">#FCFAFB</span>
+          </div>
+        </div>
+
+        <div class="color-input-box">
+          <input type="color" id="corTexto" value="#211324" onchange="atualizarHexDisplay('corTexto', 'hexTexto')" />
+          <div class="color-meta">
+            <span class="color-meta-label">Texto Principal</span>
+            <span class="color-meta-val" id="hexTexto">#211324</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 3: SERVIÇOS ── -->
+    <div class="panel-section" id="tabServicos">
+      <h2 class="section-title">Menu de Serviços & Preços</h2>
+      <p class="section-subtitle">Adicione, edite ou remova procedimentos e valores com facilidade.</p>
+
+      <div class="items-stack" id="servicosContainer"></div>
+      <button class="btn-add-item" onclick="adicionarServicoItem()">➕ Adicionar Novo Serviço</button>
+    </div>
+
+    <!-- ── TAB 4: PORTFÓLIO ── -->
+    <div class="panel-section" id="tabPortfolio">
+      <h2 class="section-title">Portfólio de Trabalhos</h2>
+      <p class="section-subtitle">Fotos reais que aparecem na galeria principal.</p>
+
+      <div class="items-stack" id="portfolioContainer"></div>
+      <button class="btn-add-item" onclick="adicionarPortfolioItem()">➕ Adicionar Nova Foto ao Portfólio</button>
+    </div>
+
+    <!-- ── TAB 5: DEPOIMENTOS ── -->
+    <div class="panel-section" id="tabDepoimentos">
+      <h2 class="section-title">Depoimentos & Avaliações</h2>
+      <p class="section-subtitle">Opiniões de clientes satisfeitas para gerar prova social.</p>
+
+      <div class="items-stack" id="depoimentosContainer"></div>
+      <button class="btn-add-item" onclick="adicionarDepoimentoItem()">➕ Adicionar Novo Depoimento</button>
+    </div>
+
+    <!-- ── TAB 6: FAQ ── -->
+    <div class="panel-section" id="tabFaq">
+      <h2 class="section-title">Perguntas Frequentes (FAQ)</h2>
+      <p class="section-subtitle">Tire as dúvidas mais comuns das clientes direto na página.</p>
+
+      <div class="items-stack" id="faqContainer"></div>
+      <button class="btn-add-item" onclick="adicionarFaqItem()">➕ Adicionar Nova Pergunta</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── MODAL DE EXPORTAÇÃO DE CÓDIGO ─── -->
+<div class="code-modal-overlay" id="codeModal" onclick="closeCodeModal(event)">
+  <div class="code-modal">
+    <h3 style="font-family:'Cormorant Garamond', serif; font-size:1.6rem; color:#FFFFFF;">Código Gerado com Sucesso! 🚀</h3>
+    <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.2rem;">
+      Você pode <strong>Baixar o arquivo config.js</strong> pronto para salvar na pasta do projeto ou copiar o código abaixo:
+    </p>
+
+    <div class="code-box" id="codeOutputBox"></div>
+
+    <div style="display:flex; gap:0.8rem; justify-content:flex-end;">
+      <button class="btn-top btn-preview" onclick="copiarCodigoOutput()">📋 Copiar Código</button>
+      <button class="btn-top btn-save-main" onclick="baixarArquivoConfig()">📥 Baixar config.js</button>
+      <button class="btn-top btn-preview" onclick="document.getElementById('codeModal').classList.remove('active')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+  // ─── BANCO DE PERFIS SALVOS (LOCALSTORAGE) ───
+  let CURRENT_CONFIG = (typeof SITE_CONFIG !== 'undefined') ? JSON.parse(JSON.stringify(SITE_CONFIG)) : {};
+
+  // Inicializa com perfis padrão se não existirem
+  function initProfiles() {
+    let saved = localStorage.getItem('NAIL_SAVED_PROFILES');
+    if (!saved) {
+      const initial = {
+        graziele: CURRENT_CONFIG,
+        camila: {
+          dados: {
+            nome: "Camila",
+            subtitulo: "Nail Designer & Instrutora",
+            whatsapp: "5511999998888",
+            instagram: "camilanails",
+            cidade: "São Paulo - SP",
+            endereco: "Studio Privativo - Moema",
+            fotoPerfil: "assets/images/graziele_perfil.jpg",
+            tituloHero: "Unhas elegantes e resistentes para o seu dia a dia.",
+            descricaoHero: "Especialista em fibra de vidro e nail art delicada com atendimento personalizado e exclusivo."
+          },
+          cores: {
+            primaria: "#B3874B",
+            secundaria: "#D9A05B",
+            destaque: "#F3D8AB",
+            fundo: "#FCFAFB",
+            texto: "#1F1A14"
+          },
+          servicos: [
+            { nome: "Alongamento em Fibra", categoria: "Alongamento", descricao: "Estrutura fina com alta resistência e aspecto 100% natural.", tempo: "Tempo: 2h30", preco: "R$ 180", destaque: true, badge: "Mais Procurado" },
+            { nome: "Blindagem em Gel", categoria: "Fortalecimento", descricao: "Protege a unha natural contra quebras.", tempo: "Tempo: 1h15", preco: "R$ 90", destaque: false, badge: "" }
+          ],
+          portfolio: [
+            { imagem: "assets/images/portfolio_2.jpg", tag: "Ouro", titulo: "Stiletto Dourada" },
+            { imagem: "assets/images/portfolio_4.jpg", tag: "Baby Boomer", titulo: "Degradê Francesinha" }
+          ],
+          depoimentos: [
+            { nome: "Renata Costa", detalhe: "Cliente VIP", inicial: "R", texto: "A Camila é impecável! Minhas unhas nunca duraram tanto sem quebrar." }
+          ],
+          faq: [
+            { pergunta: "Como agendar?", resposta: "Basta escolher o dia e horário aqui no site e confirmar no WhatsApp." }
+          ]
+        }
+      };
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(initial));
+    }
+    renderProfileSelectOptions();
+    carregarPerfilParaFormulario(CURRENT_CONFIG);
+  }
+
+  function renderProfileSelectOptions() {
+    const selector = document.getElementById('profileSelector');
+    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    selector.innerHTML = '';
+    for (let key in profiles) {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = profiles[key].dados ? `${profiles[key].dados.nome} (${key})` : key;
+      selector.appendChild(opt);
+    }
+  }
+
+  function onProfileChange(profileKey) {
+    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    if (profiles[profileKey]) {
+      CURRENT_CONFIG = profiles[profileKey];
+      carregarPerfilParaFormulario(CURRENT_CONFIG);
+    }
+  }
+
+  function salvarNovoPerfilModal() {
+    const nome = prompt("Digite o nome da nova cliente (ex: juliana, beatriz):");
+    if (!nome) return;
+    const cleanKey = nome.toLowerCase().replace(/\s+/g, '_');
+    
+    // Coleta os dados atuais do form
+    const configAtual = coletarConfigDoFormulario();
+    configAtual.dados.nome = nome.charAt(0).toUpperCase() + nome.slice(1);
+    
+    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    profiles[cleanKey] = configAtual;
+    localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+    
+    renderProfileSelectOptions();
+    document.getElementById('profileSelector').value = cleanKey;
+    onProfileChange(cleanKey);
+    alert(`Perfil "${nome}" criado com sucesso!`);
+  }
+
+  /* ─── CARREGA CONFIG NOS CAMPOS ─── */
+  function carregarPerfilParaFormulario(cfg) {
+    const d = cfg.dados || cfg || {};
+    document.getElementById('cfgNome').value = d.nome || '';
+    document.getElementById('cfgSubtitulo').value = d.subtitulo || '';
+    document.getElementById('cfgWhats').value = d.whatsapp || '';
+    document.getElementById('cfgInsta').value = d.instagram || '';
+    document.getElementById('cfgCidade').value = d.cidade || '';
+    document.getElementById('cfgFoto').value = d.fotoPerfil || '';
+    document.getElementById('cfgDescricaoHero').value = d.descricaoHero || '';
+
+    // Cores
+    if (cfg.cores) {
+      aplicarPresetCores(cfg.cores.primaria, cfg.cores.secundaria, cfg.cores.destaque, cfg.cores.fundo, cfg.cores.texto);
+    }
+
+    // Serviços
+    renderServicosStack(cfg.servicos || []);
+    // Portfólio
+    renderPortfolioStack(cfg.portfolio || []);
+    // Depoimentos
+    renderDepoimentosStack(cfg.depoimentos || []);
+    // FAQ
+    renderFaqStack(cfg.faq || []);
+  }
+
+  /* ─── COLETA DADOS DO FORMULÁRIO ─── */
+  function coletarConfigDoFormulario() {
+    const servicos = [];
+    document.querySelectorAll('#servicosContainer .dynamic-item-card').forEach(card => {
+      servicos.push({
+        nome: card.querySelector('.s-nome').value.trim(),
+        categoria: card.querySelector('.s-categoria').value.trim(),
+        descricao: card.querySelector('.s-desc').value.trim(),
+        tempo: card.querySelector('.s-tempo').value.trim(),
+        preco: card.querySelector('.s-preco').value.trim(),
+        destaque: card.querySelector('.s-destaque').checked,
+        badge: card.querySelector('.s-badge').value.trim()
+      });
+    });
+
+    const portfolio = [];
+    document.querySelectorAll('#portfolioContainer .dynamic-item-card').forEach(card => {
+      portfolio.push({
+        imagem: card.querySelector('.p-img').value.trim(),
+        tag: card.querySelector('.p-tag').value.trim(),
+        titulo: card.querySelector('.p-titulo').value.trim()
+      });
+    });
+
+    const depoimentos = [];
+    document.querySelectorAll('#depoimentosContainer .dynamic-item-card').forEach(card => {
+      depoimentos.push({
+        nome: card.querySelector('.d-nome').value.trim(),
+        detalhe: card.querySelector('.d-detalhe').value.trim(),
+        inicial: card.querySelector('.d-nome').value.trim().charAt(0) || 'C',
+        texto: card.querySelector('.d-texto').value.trim()
+      });
+    });
+
+    const faq = [];
+    document.querySelectorAll('#faqContainer .dynamic-item-card').forEach(card => {
+      faq.push({
+        pergunta: card.querySelector('.f-pergunta').value.trim(),
+        resposta: card.querySelector('.f-resposta').value.trim()
+      });
+    });
+
+    return {
+      dados: {
+        nome: document.getElementById('cfgNome').value.trim(),
+        subtitulo: document.getElementById('cfgSubtitulo').value.trim(),
+        whatsapp: document.getElementById('cfgWhats').value.trim().replace(/\D/g, ''),
+        instagram: document.getElementById('cfgInsta').value.trim().replace('@', ''),
+        cidade: document.getElementById('cfgCidade').value.trim(),
+        endereco: "Atendimento com hora marcada",
+        fotoPerfil: document.getElementById('cfgFoto').value.trim(),
+        tituloHero: "Unhas perfeitas com o <em>cuidado</em> que você merece.",
+        descricaoHero: document.getElementById('cfgDescricaoHero').value.trim()
+      },
+      cores: {
+        primaria: document.getElementById('corPrimaria').value,
+        secundaria: document.getElementById('corSecundaria').value,
+        destaque: document.getElementById('corDestaque').value,
+        fundo: document.getElementById('corFundo').value,
+        texto: document.getElementById('corTexto').value
+      },
+      servicos,
+      portfolio,
+      depoimentos,
+      faq,
+      agendamento: {
+        horariosPadrao: ['08:30', '09:45', '11:00', '13:30', '14:45', '16:00', '17:15', '18:30'],
+        atendeDomingo: false,
+        mensagemAviso: "Ao clicar abaixo você confirma o horário diretamente no WhatsApp."
+      }
+    };
+  }
+
+  /* ─── RENDERERS DE ITENS DINÂMICOS ─── */
+  function renderServicosStack(servicos) {
+    const cont = document.getElementById('servicosContainer');
+    cont.innerHTML = '';
+    servicos.forEach((s, i) => cont.appendChild(criarCardServico(s, i)));
+  }
+  function criarCardServico(s, i) {
+    const div = document.createElement('div');
+    div.className = 'dynamic-item-card';
+    div.innerHTML = `
+      <div class="item-card-head">
+        <span class="item-card-title">💅 Serviço #${i + 1}</span>
+        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome do Serviço</label>
+          <input type="text" class="s-nome" value="${s.nome || ''}" />
+        </div>
+        <div class="form-group">
+          <label>Categoria (ex: Alongamento, Esmaltação)</label>
+          <input type="text" class="s-categoria" value="${s.categoria || ''}" />
+        </div>
+        <div class="form-group">
+          <label>Tempo Médio (ex: 2h00)</label>
+          <input type="text" class="s-tempo" value="${s.tempo || ''}" />
+        </div>
+        <div class="form-group">
+          <label>Preço (Opcional - ex: R$ 150)</label>
+          <input type="text" class="s-preco" value="${s.preco || ''}" />
+        </div>
+        <div class="form-group full-width">
+          <label>Descrição</label>
+          <input type="text" class="s-desc" value="${s.descricao || ''}" />
+        </div>
+        <div class="form-group">
+          <label>Badge de Destaque (ex: Mais Pedido)</label>
+          <input type="text" class="s-badge" value="${s.badge || ''}" />
+        </div>
+        <div class="form-group" style="display:flex; flex-direction:row; align-items:center; gap:0.5rem; margin-top:1.5rem;">
+          <input type="checkbox" class="s-destaque" ${s.destaque ? 'checked' : ''} style="width:18px; height:18px;" />
+          <label style="margin:0; text-transform:none;">Destacar este card</label>
+        </div>
+      </div>
+    `;
+    return div;
+  }
+  function adicionarServicoItem() {
+    document.getElementById('servicosContainer').appendChild(criarCardServico({
+      nome: "Novo Procedimento", categoria: "Alongamento", tempo: "Tempo: 2h00", preco: "", descricao: "Descrição do procedimento aqui."
+    }, document.querySelectorAll('#servicosContainer .dynamic-item-card').length));
+  }
+
+  /* ── PORTFÓLIO ── */
+  function renderPortfolioStack(portfolio) {
+    const cont = document.getElementById('portfolioContainer');
+    cont.innerHTML = '';
+    portfolio.forEach((p, i) => cont.appendChild(criarCardPortfolio(p, i)));
+  }
+  function criarCardPortfolio(p, i) {
+    const div = document.createElement('div');
+    div.className = 'dynamic-item-card';
+    div.innerHTML = `
+      <div class="item-card-head">
+        <span class="item-card-title">📸 Foto #${i + 1}</span>
+        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Caminho da Imagem / Link</label>
+          <input type="text" class="p-img" value="${p.imagem || ''}" />
+        </div>
+        <div class="form-group">
+          <label>Tag (ex: Decoração 3D, Clássica)</label>
+          <input type="text" class="p-tag" value="${p.tag || ''}" />
+        </div>
+        <div class="form-group full-width">
+          <label>Título / Descrição da Foto</label>
+          <input type="text" class="p-titulo" value="${p.titulo || ''}" />
+        </div>
+      </div>
+    `;
+    return div;
+  }
+  function adicionarPortfolioItem() {
+    document.getElementById('portfolioContainer').appendChild(criarCardPortfolio({
+      imagem: "assets/images/portfolio_1.jpg", tag: "Nail Art", titulo: "Novo Trabalho"
+    }, document.querySelectorAll('#portfolioContainer .dynamic-item-card').length));
+  }
+
+  /* ── DEPOIMENTOS ── */
+  function renderDepoimentosStack(depoimentos) {
+    const cont = document.getElementById('depoimentosContainer');
+    cont.innerHTML = '';
+    depoimentos.forEach((d, i) => cont.appendChild(criarCardDepoimento(d, i)));
+  }
+  function criarCardDepoimento(d, i) {
+    const div = document.createElement('div');
+    div.className = 'dynamic-item-card';
+    div.innerHTML = `
+      <div class="item-card-head">
+        <span class="item-card-title">💬 Avaliação #${i + 1}</span>
+        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome da Cliente</label>
+          <input type="text" class="d-nome" value="${d.nome || ''}" />
+        </div>
+        <div class="form-group">
+          <label>Detalhe (ex: Cliente há 2 anos)</label>
+          <input type="text" class="d-detalhe" value="${d.detalhe || ''}" />
+        </div>
+        <div class="form-group full-width">
+          <label>Texto do Depoimento</label>
+          <textarea class="d-texto">${d.texto || ''}</textarea>
+        </div>
+      </div>
+    `;
+    return div;
+  }
+  function adicionarDepoimentoItem() {
+    document.getElementById('depoimentosContainer').appendChild(criarCardDepoimento({
+      nome: "Nova Cliente", detalhe: "Alongamento em Fibra", texto: "Adorei o atendimento e o capricho!"
+    }, document.querySelectorAll('#depoimentosContainer .dynamic-item-card').length));
+  }
+
+  /* ── FAQ ── */
+  function renderFaqStack(faq) {
+    const cont = document.getElementById('faqContainer');
+    cont.innerHTML = '';
+    faq.forEach((f, i) => cont.appendChild(criarCardFaq(f, i)));
+  }
+  function criarCardFaq(f, i) {
+    const div = document.createElement('div');
+    div.className = 'dynamic-item-card';
+    div.innerHTML = `
+      <div class="item-card-head">
+        <span class="item-card-title">❓ Pergunta #${i + 1}</span>
+        <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Pergunta</label>
+          <input type="text" class="f-pergunta" value="${f.pergunta || ''}" />
+        </div>
+        <div class="form-group full-width">
+          <label>Resposta</label>
+          <textarea class="f-resposta">${f.resposta || ''}</textarea>
+        </div>
+      </div>
+    `;
+    return div;
+  }
+  function adicionarFaqItem() {
+    document.getElementById('faqContainer').appendChild(criarCardFaq({
+      pergunta: "Como cuidar das unhas após o procedimento?", resposta: "Evite usar as unhas como ferramentas e hidrate as cutículas diariamente."
+    }, document.querySelectorAll('#faqContainer .dynamic-item-card').length));
+  }
+
+  /* ─── CORES HELPERS ─── */
+  function aplicarPresetCores(prim, sec, dest, fundo, texto) {
+    document.getElementById('corPrimaria').value = prim;
+    document.getElementById('corSecundaria').value = sec;
+    document.getElementById('corDestaque').value = dest;
+    document.getElementById('corFundo').value = fundo;
+    document.getElementById('corTexto').value = texto;
+
+    atualizarHexDisplay('corPrimaria', 'hexPrimaria');
+    atualizarHexDisplay('corSecundaria', 'hexSecundaria');
+    atualizarHexDisplay('corDestaque', 'hexDestaque');
+    atualizarHexDisplay('corFundo', 'hexFundo');
+    atualizarHexDisplay('corTexto', 'hexTexto');
+  }
+  function atualizarHexDisplay(inputId, spanId) {
+    document.getElementById(spanId).textContent = document.getElementById(inputId).value.toUpperCase();
+  }
+
+  /* ─── NAVEGAÇÃO DE ABAS ─── */
+  function switchTab(tabId, btn) {
+    document.querySelectorAll('.panel-section').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  /* ─── EXPORTAÇÃO & SALVAMENTO ─── */
+  function gerarCodigoConfig() {
+    const config = coletarConfigDoFormulario();
+    
+    // Salva no perfil selecionado
+    const currentKey = document.getElementById('profileSelector').value;
+    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    profiles[currentKey] = config;
+    localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+
+    const code = `// ═══════════════════════════════════════════════════════════════════════════════\n` +
+                 `// ⚙️ CONFIGURAÇÃO DO SITE — ${config.dados.nome.toUpperCase()}\n` +
+                 `// ═══════════════════════════════════════════════════════════════════════════════\n\n` +
+                 `const SITE_CONFIG = ${JSON.stringify(config, null, 2)};\n`;
+
+    document.getElementById('codeOutputBox').textContent = code;
+    document.getElementById('codeModal').classList.add('active');
+  }
+
+  function copiarCodigoOutput() {
+    const code = document.getElementById('codeOutputBox').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      alert('Código copiado com sucesso!');
+    });
+  }
+
+  function baixarArquivoConfig() {
+    const code = document.getElementById('codeOutputBox').textContent;
+    const blob = new Blob([code], { type: 'application/javascript;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'config.js';
+    link.click();
+  }
+
+  function closeCodeModal(e) {
+    if (e.target === document.getElementById('codeModal')) {
+      document.getElementById('codeModal').classList.remove('active');
+    }
+  }
+
+  function visualizarSiteLive() {
+    const cfg = coletarConfigDoFormulario();
+    const params = `?nome=${encodeURIComponent(cfg.dados.nome)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
+    window.open(`index.html${params}`, '_blank');
+  }
+
+  // Inicializa ao carregar
+  window.addEventListener('DOMContentLoaded', initProfiles);
+</script>
+
+</body>
+</html>
