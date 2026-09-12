@@ -1757,13 +1757,16 @@
     if (!baseUrl.endsWith('/')) baseUrl += '/';
 
     let linkFinal = '';
-    // Se for a pasta sara
+    // Mapeamento de perfis com páginas dedicadas
     if (currentKey === 'sara' || currentKey === 'sarah') {
       linkFinal = `${baseUrl}clientes/sara/`;
+    } else if (currentKey === 'julia' || currentKey === 'julia_albuquerque' || currentKey === 'albuquerq' || currentKey === 'albuquerque') {
+      linkFinal = `${baseUrl}clientes/julia/`;
     } else if (currentKey === 'graziele') {
       linkFinal = baseUrl;
     } else {
-      linkFinal = `${baseUrl}?nome=${encodeURIComponent(cfg.dados.nome)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
+      // Se tiver pasta própria para este perfil
+      linkFinal = `${baseUrl}clientes/${currentKey}/`;
     }
 
     document.getElementById('shareUrlDisplay').textContent = linkFinal;
