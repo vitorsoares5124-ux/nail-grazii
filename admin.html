@@ -579,6 +579,11 @@
       </button>
     </div>
 
+    <!-- Botão Compartilhar / Prospecção -->
+    <button class="btn-top btn-preview" onclick="abrirModalCompartilhar()">
+      📲 Link & Mensagem WhatsApp
+    </button>
+
     <!-- Botão Visualizar Live -->
     <button class="btn-top btn-preview" onclick="visualizarSiteLive()">
       👁️ Testar no Site
@@ -959,6 +964,32 @@
     <div class="modal-footer">
       <button class="btn-top btn-preview" onclick="copiarCodigoOutput()">📋 Copiar Código</button>
       <button class="btn-top btn-save-main" onclick="baixarArquivoConfig()">📥 Baixar config.js</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL DE COMPARTILHAMENTO / WHATSAPP ─── -->
+<div class="modal-backdrop" id="shareModal" onclick="closeShareModal(event)">
+  <div class="modal-container" style="max-width: 650px;">
+    <div class="modal-header">
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">📲 Enviar Demonstração / WhatsApp</h3>
+      <button class="btn-remove-item" onclick="document.getElementById('shareModal').classList.remove('active')">✕ Fechar</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom: 1.2rem;">
+        <label style="color:#E8A9BF; margin-bottom:0.4rem; display:block;">🔗 Link do Site da Profissional:</label>
+        <div style="background:#0A050D; border:1px solid var(--border); padding:0.8rem 1rem; border-radius:10px; color:#79FFA8; font-family:monospace; font-size:0.88rem; word-break:break-all;" id="shareUrlDisplay"></div>
+        <button type="button" class="btn-top btn-preview" style="margin-top:0.6rem; width:100%;" onclick="copiarShareLink()">📋 Copiar Link</button>
+      </div>
+
+      <div>
+        <label style="color:#E8A9BF; margin-bottom:0.4rem; display:block;">💬 Mensagem Pronta de Abordagem:</label>
+        <textarea id="sharePitchText" style="width:100%; min-height:130px; font-size:0.9rem; line-height:1.5;"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-top btn-preview" onclick="copiarSharePitch()">📋 Copiar Mensagem</button>
+      <button class="btn-top btn-save-main" style="background:#25D366; border:none;" onclick="enviarViaWhatsAppWeb()">🚀 Abrir no WhatsApp</button>
     </div>
   </div>
 </div>
@@ -1568,11 +1599,66 @@
   /* ─── TESTAR SITE LIVE ─── */
   function visualizarSiteLive() {
     const cfg = coletarConfigDoFormulario();
-    // Salva no localStorage para que o index.html carregue instantaneamente tudo (fotos base64, cores, serviços, subtitulo)
     localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(cfg));
-    
     const params = `?preview=live&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
     window.open(`index.html${params}`, '_blank');
+  }
+
+  /* ─── MODAL DE COMPARTILHAR / PROSPECÇÃO ─── */
+  function abrirModalCompartilhar() {
+    const cfg = coletarConfigDoFormulario();
+    const currentKey = document.getElementById('profileSelector').value;
+    
+    let baseUrl = window.location.href.split('admin.html')[0];
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+    let linkFinal = '';
+    // Se for a pasta sara
+    if (currentKey === 'sara' || currentKey === 'sarah') {
+      linkFinal = `${baseUrl}clientes/sara/`;
+    } else if (currentKey === 'graziele') {
+      linkFinal = baseUrl;
+    } else {
+      linkFinal = `${baseUrl}?nome=${encodeURIComponent(cfg.dados.nome)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
+    }
+
+    document.getElementById('shareUrlDisplay').textContent = linkFinal;
+
+    const pitch = `Oi ${cfg.dados.nome}, tudo bem? Amei muito os seus trabalhos com nail design no seu Instagram! 😍\n\n` +
+                  `Criei uma demonstração de um site moderno e exclusivo para o seu ateliê, com agendamento direto no seu WhatsApp:\n👉 ${linkFinal}\n\n` +
+                  `O que você achou? Ficou lindo com o seu nome! 💕`;
+
+    document.getElementById('sharePitchText').value = pitch;
+    document.getElementById('shareModal').classList.add('active');
+  }
+
+  function copiarShareLink() {
+    const link = document.getElementById('shareUrlDisplay').textContent;
+    navigator.clipboard.writeText(link).then(() => {
+      alert('Link copiado com sucesso!');
+    });
+  }
+
+  function copiarSharePitch() {
+    const pitch = document.getElementById('sharePitchText').value;
+    navigator.clipboard.writeText(pitch).then(() => {
+      alert('Mensagem copiada com sucesso! Prontinha para colar no WhatsApp ou direct do Instagram.');
+    });
+  }
+
+  function enviarViaWhatsAppWeb() {
+    const cfg = coletarConfigDoFormulario();
+    const pitch = document.getElementById('sharePitchText').value;
+    const cleanNumber = cfg.dados.whatsapp.replace(/\D/g, '');
+    const finalNumber = cleanNumber.startsWith('55') ? cleanNumber : `55${cleanNumber}`;
+    const url = `https://wa.me/${finalNumber}?text=${encodeURIComponent(pitch)}`;
+    window.open(url, '_blank');
+  }
+
+  function closeShareModal(e) {
+    if (e.target === document.getElementById('shareModal')) {
+      document.getElementById('shareModal').classList.remove('active');
+    }
   }
 
   // Inicializa ao carregar
