@@ -2347,10 +2347,10 @@
           tile.className = 'gallery-tile';
           tile.onclick = function() { openLightbox(p.imagem, p.titulo); };
           tile.innerHTML = `
-            <img src="${p.imagem}" alt="${p.titulo}" loading="lazy" />
+            <img src="${p.imagem}" alt="${p.titulo || 'Trabalho de Unhas'}" loading="lazy" />
             <div class="tile-scrim">
               <span class="tile-tag">${p.tag || 'Trabalho'}</span>
-              <div class="tile-name">${p.titulo}</div>
+              ${p.titulo ? `<div class="tile-name">${p.titulo}</div>` : ''}
             </div>
           `;
           galGrid.appendChild(tile);

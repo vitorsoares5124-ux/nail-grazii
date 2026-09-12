@@ -119,6 +119,33 @@
       box-shadow: 0 6px 20px rgba(217, 138, 167, 0.5);
     }
 
+    /* ─── TOAST & SAVE INDICATOR ─── */
+    #saveToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #180D1D;
+      border: 1px solid var(--accent);
+      color: #FFFFFF;
+      padding: 0.85rem 1.4rem;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    #saveToast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ─── MAIN LAYOUT ─── */
     .main-layout {
       display: grid;
@@ -579,6 +606,11 @@
       </button>
     </div>
 
+    <!-- Botão Salvar Perfil Imediato -->
+    <button class="btn-top btn-preview" onclick="salvarPerfilManualComToast()" style="border-color: #D98AA7; color: #E8A9BF;" title="Salva todas as fotos e alterações deste perfil no navegador">
+      💾 Salvar Perfil
+    </button>
+
     <!-- Botão Compartilhar / Prospecção -->
     <button class="btn-top btn-preview" onclick="abrirModalCompartilhar()">
       📲 Link & Mensagem WhatsApp
@@ -591,10 +623,13 @@
 
     <!-- Botão Salvar e Gerar Código -->
     <button class="btn-top btn-save-main" onclick="gerarCodigoConfig()">
-      💾 Salvar & Baixar config.js
+      📄 Baixar config.js
     </button>
   </div>
 </header>
+
+<!-- Toast de Confirmação de Salvamento -->
+<div id="saveToast">✨ Perfil e fotos salvos com sucesso!</div>
 
 <!-- ─── LAYOUT PRINCIPAL ─── -->
 <div class="main-layout">
@@ -1048,14 +1083,78 @@
         { pergunta: "Como funciona para agendar o meu horário?", resposta: "Basta escolher o serviço e o melhor horário aqui pelo site. Ao confirmar, seu agendamento é enviado diretamente pelo WhatsApp." },
         { pergunta: "Qual a diferença entre Fibra de Vidro e Gel?", resposta: "A fibra de vidro utiliza filamentos ultrafinos que se moldam à unha, proporcionando máxima resistência e naturalidade. O gel é aplicado diretamente com molde e confere excelente acabamento." }
       ]
+    },
+    sara: {
+      dados: {
+        nome: "Sarah",
+        subtitulo: "Smooth Art Nails",
+        whatsapp: "5511910522710",
+        instagram: "smoothart.nailss",
+        cidade: "Sorocaba - SP · Atendimento com hora marcada",
+        endereco: "Atendimento com hora marcada",
+        fotoPerfil: "assets/images/perfil.jpg",
+        tituloHero: "Unhas perfeitas com o <em>cuidado</em> que você merece.",
+        descricaoHero: "Faço alongamento em fibra, gel e decorações com acabamento fininho, natural e que dura semanas sem quebrar ou descolar."
+      },
+      cores: {
+        primaria: "#74467E",
+        secundaria: "#D98AA7",
+        destaque: "#E8A9BF",
+        fundo: "#FCFAFB",
+        texto: "#211324",
+        botaoBg: "#74467E",
+        botaoTexto: "#FFFFFF",
+        botaoHover: "#74467E",
+        tituloCor: "#211324",
+        tituloDestaque: "#74467E"
+      },
+      servicos: [
+        { nome: "Fibra de Vidro", categoria: "Alongamento", descricao: "O alongamento queridinho! Fica super leve, muito resistente e com aparência idêntica à unha natural.", tempo: "Tempo médio: 2h30", preco: "", destaque: true, badge: "Mais Pedido" },
+        { nome: "Unhas em Gel", categoria: "Alongamento", descricao: "Estrutura firme, brilho impecável que não sai e formato perfeito para o comprimento que você preferir.", tempo: "Tempo médio: 2h00", preco: "", destaque: false, badge: "" },
+        { nome: "Nail Art & Efeitos 3D", categoria: "Decoração", descricao: "Unhas personalizadas com flores em relevo, joias, glitter encapsulado, degradê ou o modelo que você trouxer de foto.", tempo: "Personalizado", preco: "", destaque: false, badge: "" },
+        { nome: "Baby Boomer", categoria: "Clássico", descricao: "A famosa francesinha esfumada! Um degradê delicado do rosa para o branco que combina com qualquer ocasião.", tempo: "Tempo médio: 2h00", preco: "", destaque: false, badge: "" },
+        { nome: "Esmaltação em Gel", categoria: "Dia a Dia", descricao: "Seca na hora na cabine de luz! Sai do ateliê sem medo de borrar e dura até 20 dias com brilho de unha recém-feita.", tempo: "Tempo médio: 1h15", preco: "", destaque: false, badge: "" },
+        { nome: "Manutenção", categoria: "Cuidados", descricao: "Essencial para quem já tem alongamento. Repõe o crescimento da unha, ajusta o formato e garante unhas sempre lindas e seguras.", tempo: "A cada 20 a 25 dias", preco: "", destaque: false, badge: "" }
+      ],
+      portfolio: [
+        { imagem: "assets/images/SnapInsta.to_731059000_17896713537501436_2194523103316702118_n.jpg", tag: "Decoração 3D", titulo: "" },
+        { imagem: "assets/images/SnapInsta.to_731078588_17896713501501436_5931661824920518520_n.jpg", tag: "Linha Luxo", titulo: "" },
+        { imagem: "assets/images/SnapInsta.to_753550885_17900074779501436_5734104526175767311_n.jpg", tag: "Baby Boomer", titulo: "" },
+        { imagem: "assets/images/SnapInsta.to_790226237_17906826990501436_432835186658751485_n.jpg", tag: "Delicada", titulo: "" },
+        { imagem: "assets/images/SnapInsta.to_790792215_17906827062501436_1332877536795137665_n.jpg", tag: "Brilho", titulo: "" },
+        { imagem: "assets/images/SnapInsta.to_791996731_17906826951501436_591658829189093930_n.jpg", tag: "Efeito Especial", titulo: "" },
+        { imagem: "assets/images/SnapInsta.to_793902287_17906826999501436_7386094298544175212_n.jpg", tag: "Clássico", titulo: "" }
+      ],
+      depoimentos: [
+        { nome: "Ana Paula M.", detalhe: "Cliente há 2 anos", inicial: "A", texto: "O trabalho da Sarah é maravilhoso! Meu alongamento durou quase um mês inteirinho sem descolar e a cutícula fica limpinha sem machucar. Recomendo de olhos fechados!" },
+        { nome: "Juliana Camargo", detalhe: "Alongamento em Fibra", inicial: "J", texto: "Fiz as decorações para um casamento e todo mundo perguntou onde eu tinha feito de tão perfeitas! Ela tem mãos de fada e é super atenciosa." },
+        { nome: "Mariana Ribeiro", detalhe: "Manutenção Frequente", inicial: "M", texto: "Espaço super limpinho e cheiroso, pontualidade de verdade e materiais de qualidade. Minhas unhas nunca ficaram tão bonitas!" }
+      ],
+      faq: [
+        { pergunta: "Quanto tempo dura o alongamento de unhas?", resposta: "O alongamento dura por tempo indeterminado, desde que você faça as manutenções a cada 20 a 25 dias." },
+        { pergunta: "O procedimento dói ou estraga a unha natural?", resposta: "Não dói nada! Quando feito com os produtos corretos e a técnica adequada, a sua unha natural cresce saudável por baixo." },
+        { pergunta: "Como funciona para agendar o meu horário?", resposta: "Basta escolher o serviço e o melhor horário aqui pelo site. Ao confirmar, seu agendamento é enviado diretamente pelo WhatsApp." },
+        { pergunta: "Qual a diferença entre Fibra de Vidro e Gel?", resposta: "A fibra de vidro utiliza filamentos ultrafinos que se moldam à unha, proporcionando máxima resistência e naturalidade. O gel é aplicado diretamente com molde e confere excelente acabamento." }
+      ]
     }
   };
 
   /* ─── INICIALIZAÇÃO DE PERFIS ─── */
   function initProfiles() {
     let saved = localStorage.getItem('NAIL_SAVED_PROFILES');
+    let profiles = {};
     if (!saved) {
-      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(DEFAULT_PROFILES));
+      profiles = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+    } else {
+      profiles = JSON.parse(saved);
+      // Garante que novos perfis padrão (como Sara) sejam adicionados se ainda não constarem
+      Object.keys(DEFAULT_PROFILES).forEach(k => {
+        if (!profiles[k]) {
+          profiles[k] = JSON.parse(JSON.stringify(DEFAULT_PROFILES[k]));
+        }
+      });
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
     }
     renderProfileSelectOptions();
 
@@ -1063,6 +1162,7 @@
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
     const lastKey = localStorage.getItem('NAIL_ACTIVE_PROFILE_KEY');
     const keyToLoad = (lastKey && profiles[lastKey]) ? lastKey : Object.keys(profiles)[0] || 'graziele';
+    currentActiveKey = keyToLoad;
     document.getElementById('profileSelector').value = keyToLoad;
     carregarPerfilParaFormulario(profiles[keyToLoad]);
   }
@@ -1079,9 +1179,19 @@
     });
   }
 
+  let currentActiveKey = '';
+
   function onProfileChange(key) {
+    // Salva o perfil anterior antes de trocar para o novo
+    if (currentActiveKey && currentActiveKey !== key) {
+      const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+      profiles[currentActiveKey] = coletarConfigDoFormulario();
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+    }
+
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
     if (profiles[key]) {
+      currentActiveKey = key;
       localStorage.setItem('NAIL_ACTIVE_PROFILE_KEY', key);
       carregarPerfilParaFormulario(profiles[key]);
     }
@@ -1231,6 +1341,8 @@
         const base64 = e.target.result;
         document.getElementById('cfgFoto').value = base64;
         atualizarAvatarPreview(base64);
+        salvarPerfilSilencioso();
+        mostrarToast('📸 Foto de perfil salva no perfil atual!');
       };
       reader.readAsDataURL(file);
     }
@@ -1245,6 +1357,7 @@
     const defaultSrc = "assets/images/graziele_perfil.jpg";
     document.getElementById('cfgFoto').value = defaultSrc;
     atualizarAvatarPreview(defaultSrc);
+    salvarPerfilSilencioso();
   }
 
   function handleCardImageUpload(input) {
@@ -1256,6 +1369,8 @@
         const base64 = e.target.result;
         card.querySelector('.p-img').value = base64;
         card.querySelector('.portfolio-thumb-img').src = base64;
+        salvarPerfilSilencioso();
+        mostrarToast('📸 Foto do portfólio salva no perfil atual!');
       };
       reader.readAsDataURL(file);
     }
@@ -1267,16 +1382,15 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           const base64 = e.target.result;
-          const fileNameClean = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-          const formattedTitle = fileNameClean.charAt(0).toUpperCase() + fileNameClean.slice(1);
           
           const newCard = criarCardPortfolio({
             imagem: base64,
             tag: "Trabalho",
-            titulo: formattedTitle || `Foto #${document.querySelectorAll('#portfolioContainer .dynamic-item-card').length + 1}`
+            titulo: "" // Sem nome/título conforme solicitado
           }, document.querySelectorAll('#portfolioContainer .dynamic-item-card').length);
           
           document.getElementById('portfolioContainer').appendChild(newCard);
+          salvarPerfilSilencioso();
         };
         reader.readAsDataURL(file);
       });
@@ -1371,8 +1485,8 @@
             <input type="text" class="p-tag" value="${p.tag || 'Trabalho'}" />
           </div>
           <div class="form-group">
-            <label>Título da Foto</label>
-            <input type="text" class="p-titulo" value="${p.titulo || ''}" />
+            <label>Título da Foto (opcional)</label>
+            <input type="text" class="p-titulo" value="${p.titulo || ''}" placeholder="Sem título (vazio)" />
           </div>
         </div>
       </div>
@@ -1381,7 +1495,7 @@
   }
   function adicionarPortfolioItem() {
     document.getElementById('portfolioContainer').appendChild(criarCardPortfolio({
-      imagem: "assets/images/portfolio_1.jpg", tag: "Nail Art", titulo: "Novo Trabalho"
+      imagem: "assets/images/portfolio_1.jpg", tag: "Nail Art", titulo: ""
     }, document.querySelectorAll('#portfolioContainer .dynamic-item-card').length));
   }
 
@@ -1664,14 +1778,48 @@
     }
   }
 
-  // Autosave: salva o estado atual do formulário antes de qualquer refresh ou saída
-  window.addEventListener('beforeunload', () => {
+  /* ─── SALVAMENTO & FEEDBACK VISUAL ─── */
+  function salvarPerfilSilencioso() {
     const currentKey = document.getElementById('profileSelector')?.value;
     if (!currentKey) return;
+    const config = coletarConfigDoFormulario();
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
-    profiles[currentKey] = coletarConfigDoFormulario();
+    profiles[currentKey] = config;
     localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
     localStorage.setItem('NAIL_ACTIVE_PROFILE_KEY', currentKey);
+  }
+
+  function mostrarToast(msg) {
+    const toast = document.getElementById('saveToast');
+    if (!toast) return;
+    toast.textContent = msg || '✨ Alterações e fotos salvas com sucesso!';
+    toast.classList.add('show');
+    clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2800);
+  }
+
+  function salvarPerfilManualComToast() {
+    salvarPerfilSilencioso();
+    const nome = document.getElementById('cfgNome')?.value || 'Perfil';
+    mostrarToast(`💾 Perfil "${nome}" e todas as fotos foram salvos!`);
+  }
+
+  // Autosave com debounce a cada alteração em campos de texto, cores e selects
+  let autosaveTimer = null;
+  document.addEventListener('input', (e) => {
+    // Ignora inputs de busca ou modais que não pertencem à config
+    if (e.target.closest('#shareModal') || e.target.closest('#codeModal')) return;
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(() => {
+      salvarPerfilSilencioso();
+    }, 600);
+  });
+
+  // Autosave: salva o estado atual do formulário antes de qualquer refresh ou saída
+  window.addEventListener('beforeunload', () => {
+    salvarPerfilSilencioso();
   });
 
   // Inicializa ao carregar
