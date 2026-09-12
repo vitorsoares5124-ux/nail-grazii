@@ -1159,7 +1159,7 @@
     renderProfileSelectOptions();
 
     // Restaura o último perfil ativo (salvo em NAIL_ACTIVE_PROFILE_KEY)
-    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
     const lastKey = localStorage.getItem('NAIL_ACTIVE_PROFILE_KEY');
     const keyToLoad = (lastKey && profiles[lastKey]) ? lastKey : Object.keys(profiles)[0] || 'graziele';
     currentActiveKey = keyToLoad;
