@@ -1058,11 +1058,13 @@
       localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(DEFAULT_PROFILES));
     }
     renderProfileSelectOptions();
-    
-    // Carrega o primeiro perfil ativo
+
+    // Restaura o último perfil ativo (salvo em NAIL_ACTIVE_PROFILE_KEY)
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
-    const firstKey = Object.keys(profiles)[0] || 'graziele';
-    carregarPerfilParaFormulario(profiles[firstKey]);
+    const lastKey = localStorage.getItem('NAIL_ACTIVE_PROFILE_KEY');
+    const keyToLoad = (lastKey && profiles[lastKey]) ? lastKey : Object.keys(profiles)[0] || 'graziele';
+    document.getElementById('profileSelector').value = keyToLoad;
+    carregarPerfilParaFormulario(profiles[keyToLoad]);
   }
 
   function renderProfileSelectOptions() {
@@ -1080,6 +1082,7 @@
   function onProfileChange(key) {
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
     if (profiles[key]) {
+      localStorage.setItem('NAIL_ACTIVE_PROFILE_KEY', key);
       carregarPerfilParaFormulario(profiles[key]);
     }
   }
@@ -1660,6 +1663,16 @@
       document.getElementById('shareModal').classList.remove('active');
     }
   }
+
+  // Autosave: salva o estado atual do formulário antes de qualquer refresh ou saída
+  window.addEventListener('beforeunload', () => {
+    const currentKey = document.getElementById('profileSelector')?.value;
+    if (!currentKey) return;
+    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    profiles[currentKey] = coletarConfigDoFormulario();
+    localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+    localStorage.setItem('NAIL_ACTIVE_PROFILE_KEY', currentKey);
+  });
 
   // Inicializa ao carregar
   window.addEventListener('DOMContentLoaded', initProfiles);
