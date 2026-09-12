@@ -2323,8 +2323,9 @@
       }
     }
 
-    // 6. Renderização Dinâmica de Portfólio
+    // 6. Renderização Dinâmica de Portfólio & Grade do "Sobre Mim"
     if (Array.isArray(cfg.portfolio) && cfg.portfolio.length > 0) {
+      // 6.1 Galeria Principal
       const galGrid = document.getElementById('galleryGrid');
       if (galGrid) {
         galGrid.innerHTML = '';
@@ -2341,6 +2342,28 @@
           `;
           galGrid.appendChild(tile);
         });
+      }
+
+      // 6.2 Grade de 3 Fotos da Seção "Sobre Mim" (Sobre / Por que fazer comigo)
+      const aboutGrid = document.querySelector('.about-gallery-grid');
+      if (aboutGrid) {
+        // Embaralha uma cópia para pegar 3 fotos aleatórias
+        const shuffled = [...cfg.portfolio].sort(() => 0.5 - Math.random());
+        const photo1 = shuffled[0] || cfg.portfolio[0];
+        const photo2 = shuffled[1] || cfg.portfolio[0];
+        const photo3 = shuffled[2] || cfg.portfolio[0];
+
+        aboutGrid.innerHTML = `
+          <div class="about-gallery-card tall" onclick="openLightbox('${photo1.imagem}', '${photo1.titulo || 'Unhas'}')">
+            <img src="${photo1.imagem}" alt="${photo1.titulo || 'Trabalho de Unhas'}" loading="lazy" />
+          </div>
+          <div class="about-gallery-card" onclick="openLightbox('${photo2.imagem}', '${photo2.titulo || 'Unhas'}')">
+            <img src="${photo2.imagem}" alt="${photo2.titulo || 'Trabalho de Unhas'}" loading="lazy" />
+          </div>
+          <div class="about-gallery-card" onclick="openLightbox('${photo3.imagem}', '${photo3.titulo || 'Unhas'}')">
+            <img src="${photo3.imagem}" alt="${photo3.titulo || 'Trabalho de Unhas'}" loading="lazy" />
+          </div>
+        `;
       }
     }
 
