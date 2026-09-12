@@ -2161,49 +2161,55 @@
 <!-- ─── CARREGAMENTO DE CONFIGURAÇÃO E PARÂMETROS DINÂMICOS ─── -->
 <script src="config.js"></script>
 <script>
-  // ─── ENGINE DINÂMICO PARA PROSPECÇÃO (URL PARAMETERS + CONFIG.JS) ───
+  // ─── ENGINE DINÂMICO COMPLETO (CONFIG.JS + URL PARAMETERS) ───
   (function initDynamicProfile() {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // Objeto padrão
-    const defaults = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {
-      nome: "Graziele",
-      subtitulo: "Nail Designer Especialista",
-      whatsapp: "5515997949066",
-      instagram: "nail_grazii",
-      fotoPerfil: "assets/images/graziele_perfil.jpg"
-    };
+    // Suporte tanto para o formato novo (SITE_CONFIG.dados) quanto para legado
+    const cfg = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {};
+    const d = cfg.dados || cfg || {};
 
-    // Lê parâmetros da URL se existirem (ex: ?nome=Camila&whats=11999998888&insta=camilanails)
-    const nome = urlParams.get('nome') || defaults.nome;
-    const whats = urlParams.get('whats') || defaults.whatsapp;
-    const insta = urlParams.get('insta') || defaults.instagram;
-    const foto = urlParams.get('foto') || defaults.fotoPerfil;
+    const nome = urlParams.get('nome') || d.nome || "Graziele";
+    const whats = urlParams.get('whats') || d.whatsapp || "5515997949066";
+    const insta = urlParams.get('insta') || d.instagram || "nail_grazii";
+    const foto = urlParams.get('foto') || d.fotoPerfil || "assets/images/graziele_perfil.jpg";
+    const subtitulo = d.subtitulo || "Nail Designer Especialista";
+    const cidade = d.cidade || "Atendimento com hora marcada";
 
-    // Atualiza o estado global
-    window.CURRENT_PROFILE = { nome, whats, insta, foto };
+    window.CURRENT_PROFILE = { nome, whats, insta, foto, subtitulo, cidade };
 
-    // 1. Atualiza Nome e Marca
-    document.querySelectorAll('.brand-title').forEach(el => el.textContent = nome);
-    const heroTitle = document.querySelector('.hero-headline');
-    if (heroTitle) {
-      heroTitle.innerHTML = `Unhas perfeitas com o <em>cuidado</em> que você merece.`;
+    // 1. Aplicação Dinâmica de Cores (se existirem no config.js)
+    if (cfg.cores) {
+      const root = document.documentElement;
+      if (cfg.cores.primaria) root.style.setProperty('--accent-mauve', cfg.cores.primaria);
+      if (cfg.cores.secundaria) root.style.setProperty('--accent-rose', cfg.cores.secundaria);
+      if (cfg.cores.destaque) root.style.setProperty('--accent-blush', cfg.cores.destaque);
+      if (cfg.cores.fundo) root.style.setProperty('--bg-main', cfg.cores.fundo);
+      if (cfg.cores.texto) root.style.setProperty('--text-main', cfg.cores.texto);
     }
+
+    // 2. Textos Básicos, Cabeçalho e Hero
+    document.querySelectorAll('.brand-title').forEach(el => el.textContent = nome);
+    document.querySelectorAll('.brand-sub').forEach(el => el.textContent = subtitulo);
+    
     const heroDesc = document.querySelector('.hero-description');
     if (heroDesc) {
-      heroDesc.innerHTML = `Olá! Sou a <strong>${nome}</strong>. Faço alongamento em fibra, gel e decorações com acabamento fininho, natural e que dura semanas sem quebrar ou descolar.`;
+      heroDesc.innerHTML = `Olá! Sou a <strong>${nome}</strong>. ${d.descricaoHero || 'Faço alongamento em fibra, gel e decorações com acabamento fininho, natural e que dura semanas sem quebrar ou descolar.'}`;
     }
     const badgeTitle = document.querySelector('.badge-title');
     if (badgeTitle) badgeTitle.textContent = nome;
 
-    // 2. Atualiza Foto de Perfil se especificada
+    const badgeSub = document.querySelector('.badge-subtitle');
+    if (badgeSub) badgeSub.textContent = subtitulo;
+
+    // 3. Foto de Perfil
     const profileImg = document.querySelector('.hero-image-inner img');
     if (profileImg && foto) {
       profileImg.src = foto;
       profileImg.alt = `${nome} — Nail Designer`;
     }
 
-    // 3. Atualiza Links do Instagram
+    // 4. Links do Instagram
     document.querySelectorAll('a[href*="instagram.com"]').forEach(link => {
       link.href = `https://www.instagram.com/${insta}/`;
       if (link.textContent.includes('@')) {
@@ -2211,13 +2217,121 @@
       }
     });
 
-    // 4. Atualiza Profissional no Resumo do Modal
-    const sumProf = document.querySelectorAll('.summary-item-value');
-    if (sumProf.length >= 4) {
-      sumProf[3].textContent = `${nome} (@${insta})`;
+    // 5. Renderização Dinâmica de Serviços (se definidos no config.js)
+    if (Array.isArray(cfg.servicos) && cfg.servicos.length > 0) {
+      const menuGrid = document.querySelector('.menu-grid');
+      const choiceList = document.querySelector('.services-choice-list');
+      
+      if (menuGrid) {
+        menuGrid.innerHTML = '';
+        cfg.servicos.forEach(s => {
+          const card = document.createElement('div');
+          card.className = `menu-card ${s.destaque ? 'featured' : ''}`;
+          card.innerHTML = `
+            ${s.badge ? `<span class="featured-tag">${s.badge}</span>` : ''}
+            <div class="card-top">
+              <div class="service-category">${s.categoria || 'Serviço'}</div>
+              <h3 class="service-heading">${s.nome}</h3>
+              <p class="service-body">${s.descricao}</p>
+            </div>
+            <div class="card-bottom">
+              <span class="service-spec">${s.preco ? `${s.preco} · ` : ''}${s.tempo || ''}</span>
+              <span class="service-select-link" onclick="openBookingWithPreset('${s.nome}')">
+                Agendar este →
+              </span>
+            </div>
+          `;
+          menuGrid.appendChild(card);
+        });
+      }
+
+      if (choiceList) {
+        choiceList.innerHTML = '';
+        cfg.servicos.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'choice-item';
+          item.onclick = function() { selectServiceChoice(this, s.nome); };
+          item.innerHTML = `
+            <div>
+              <div class="choice-info-title">${s.nome}${s.preco ? ` · ${s.preco}` : ''}</div>
+              <div class="choice-info-sub">${s.descricao}</div>
+            </div>
+            <div class="choice-radio"></div>
+          `;
+          choiceList.appendChild(item);
+        });
+      }
     }
 
-    // 5. Atualiza o Título da Página
+    // 6. Renderização Dinâmica de Portfólio (se definido no config.js)
+    if (Array.isArray(cfg.portfolio) && cfg.portfolio.length > 0) {
+      const galGrid = document.getElementById('galleryGrid');
+      if (galGrid) {
+        galGrid.innerHTML = '';
+        cfg.portfolio.forEach(p => {
+          const tile = document.createElement('div');
+          tile.className = 'gallery-tile';
+          tile.onclick = function() { openLightbox(p.imagem, p.titulo); };
+          tile.innerHTML = `
+            <img src="${p.imagem}" alt="${p.titulo}" loading="lazy" />
+            <div class="tile-scrim">
+              <span class="tile-tag">${p.tag || 'Trabalho'}</span>
+              <div class="tile-name">${p.titulo}</div>
+            </div>
+          `;
+          galGrid.appendChild(tile);
+        });
+      }
+    }
+
+    // 7. Renderização Dinâmica de Depoimentos (se definidos no config.js)
+    if (Array.isArray(cfg.depoimentos) && cfg.depoimentos.length > 0) {
+      const vGrid = document.querySelector('.voices-grid');
+      if (vGrid) {
+        vGrid.innerHTML = '';
+        cfg.depoimentos.forEach(d => {
+          const card = document.createElement('div');
+          card.className = 'voice-card';
+          card.innerHTML = `
+            <div>
+              <div class="quote-mark">“</div>
+              <p class="voice-text">${d.texto}</p>
+            </div>
+            <div class="voice-author">
+              <div class="author-initial">${d.inicial || d.nome.charAt(0)}</div>
+              <div>
+                <div class="author-name">${d.nome}</div>
+                <div class="author-detail">${d.detalhe || 'Cliente'}</div>
+              </div>
+            </div>
+          `;
+          vGrid.appendChild(card);
+        });
+      }
+    }
+
+    // 8. Renderização Dinâmica de FAQ (se definido no config.js)
+    if (Array.isArray(cfg.faq) && cfg.faq.length > 0) {
+      const faqCont = document.querySelector('.faq-container');
+      if (faqCont) {
+        faqCont.innerHTML = '';
+        cfg.faq.forEach(f => {
+          const item = document.createElement('div');
+          item.className = 'faq-item';
+          item.onclick = function() { toggleFaq(this); };
+          item.innerHTML = `
+            <div class="faq-question">
+              <span>${f.pergunta}</span>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">${f.resposta}</div>
+          `;
+          faqCont.appendChild(item);
+        });
+      }
+    }
+
+    // 9. Atualiza o Título da Aba
     document.title = `${nome} Nail Designer 💅 | Unhas em Gel e Fibra`;
   })();
 
