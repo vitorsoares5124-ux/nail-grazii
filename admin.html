@@ -997,9 +997,10 @@
       </p>
       <pre class="code-box" id="codeOutputBox"></pre>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="flex-wrap:wrap; gap:0.5rem;">
       <button class="btn-top btn-preview" onclick="copiarCodigoOutput()">📋 Copiar Código</button>
       <button class="btn-top btn-save-main" onclick="baixarArquivoConfig()">📥 Baixar config.js</button>
+      <button class="btn-top btn-preview" style="border-color:#8E6297; color:#E8A9BF;" onclick="baixarIndexHtmlPronto()">🌐 Baixar index.html</button>
     </div>
   </div>
 </div>
@@ -1732,6 +1733,31 @@
     link.href = URL.createObjectURL(blob);
     link.download = 'config.js';
     link.click();
+  }
+
+  function baixarIndexHtmlPronto() {
+    const cfg = coletarConfigDoFormulario();
+    const nome = cfg.dados.nome || 'Nail Designer';
+    const subtitulo = cfg.dados.subtitulo || 'Especialista em Unhas';
+    
+    // Pega o template base de index.html
+    fetch('index.html')
+      .then(res => res.text())
+      .then(html => {
+        // Substitui o título e meta tags no head
+        let customHtml = html.replace(/<title>.*?<\/title>/i, `<title>${nome} — ${subtitulo} 💅 | Unhas em Gel e Fibra</title>`);
+        customHtml = customHtml.replace(/<meta property="og:title".*?>/i, `<meta property="og:title" content="${nome} — ${subtitulo} 💅" />`);
+        customHtml = customHtml.replace(/<meta property="og:description".*?>/i, `<meta property="og:description" content="Unhas lindas, fortes e naturais. Agende seu horário online no WhatsApp!" />`);
+        
+        const blob = new Blob([customHtml], { type: 'text/html;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'index.html';
+        link.click();
+      })
+      .catch(() => {
+        alert('Não foi possível carregar o template do index.html. Use o arquivo da pasta raiz ou de outra cliente.');
+      });
   }
 
   function closeCodeModal(e) {
