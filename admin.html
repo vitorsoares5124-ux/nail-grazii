@@ -602,8 +602,11 @@
       <select id="profileSelector" class="profile-select" onchange="onProfileChange(this.value)">
         <!-- Preenchido via JS -->
       </select>
-      <button class="btn-top btn-preview" onclick="salvarNovoPerfilModal()" title="Criar Novo Perfil" style="padding: 0.3rem 0.7rem; font-size: 0.78rem;">
+      <button class="btn-top btn-preview" onclick="abrirModalNovoPerfil()" title="Criar Novo Perfil" style="padding: 0.3rem 0.7rem; font-size: 0.78rem;">
         + Novo
+      </button>
+      <button class="btn-top btn-preview" onclick="excluirPerfilAtual()" title="Excluir Perfil Atual" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color:#FF7979; border-color:rgba(255,100,100,0.3);">
+        🗑️
       </button>
     </div>
 
@@ -1030,6 +1033,35 @@
     </div>
   </div>
 </div>
+<!-- ─── MODAL DE NOVO PERFIL ─── -->
+<div class="modal-backdrop" id="novoPerfilModal" onclick="fecharModalNovoPerfil(event)">
+  <div class="modal-container" style="max-width: 500px;">
+    <div class="modal-header">
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">✨ Criar Novo Perfil</h3>
+      <button class="btn-remove-item" onclick="document.getElementById('novoPerfilModal').classList.remove('active')">✕ Fechar</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom: 1.2rem;">
+        <label style="color:#E8A9BF; margin-bottom:0.4rem; display:block; font-size:0.88rem; font-weight:700;">Nome da Profissional ou Ateliê:</label>
+        <input type="text" id="novoPerfilNomeInput" placeholder="Ex: Camila Silva, Studio Amanda, Débora Nails..." style="width:100%; font-size:1rem; padding:0.8rem 1rem;" onkeydown="if(event.key==='Enter') confirmarCriarNovoPerfil()" />
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="color:var(--text-muted); margin-bottom:0.4rem; display:block; font-size:0.84rem;">Iniciar com qual modelo?</label>
+        <select id="novoPerfilModeloBase" style="width:100%; background:var(--card-sub); border:1px solid var(--border); color:#FFFFFF; padding:0.7rem 1rem; border-radius:10px; outline:none;">
+          <option value="graziele">💎 Modelo Completo — Graziele Nail Designer</option>
+          <option value="sara">🌸 Modelo Completo — Sarah Smooth Art Nails</option>
+          <option value="atual">📋 Copiar dados da tela atual</option>
+          <option value="limpo">✨ Perfil em Branco / Limpo</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-top btn-preview" onclick="document.getElementById('novoPerfilModal').classList.remove('active')">Cancelar</button>
+      <button class="btn-top btn-save-main" onclick="confirmarCriarNovoPerfil()">Criar Perfil ✨</button>
+    </div>
+  </div>
+</div>
 
 <script>
   /* ═══════════════════════════════════════════════════════════════════ */
@@ -1225,22 +1257,143 @@
     }
   }
 
-  function salvarNovoPerfilModal() {
-    const nome = prompt("Digite o nome da nova profissional (ex: Camila, Juliana, Studio Amanda):");
-    if (!nome) return;
-    const cleanKey = nome.toLowerCase().replace(/[^a-z0-9]/g, '_');
-    
-    const configAtual = coletarConfigDoFormulario();
-    configAtual.dados.nome = nome.charAt(0).toUpperCase() + nome.slice(1);
+  function abrirModalNovoPerfil() {
+    const input = document.getElementById('novoPerfilNomeInput');
+    if (input) input.value = '';
+    document.getElementById('novoPerfilModal').classList.add('active');
+    setTimeout(() => {
+      if (input) input.focus();
+    }, 150);
+  }
+
+  function fecharModalNovoPerfil(e) {
+    if (e.target === document.getElementById('novoPerfilModal')) {
+      document.getElementById('novoPerfilModal').classList.remove('active');
+    }
+  }
+
+  function confirmarCriarNovoPerfil() {
+    const input = document.getElementById('novoPerfilNomeInput');
+    const nome = input ? input.value.trim() : '';
+    if (!nome) {
+      alert('Por favor, digite o nome da profissional ou ateliê!');
+      if (input) input.focus();
+      return;
+    }
+
+    // Gera chave amigável única
+    let baseKey = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    if (!baseKey) baseKey = 'perfil_' + Date.now();
+    let cleanKey = baseKey;
     
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
-    profiles[cleanKey] = configAtual;
-    localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
     
+    // Se já existir chave igual, adiciona sufixo numérico
+    let count = 2;
+    while (profiles[cleanKey]) {
+      cleanKey = `${baseKey}_${count}`;
+      count++;
+    }
+
+    const modelo = document.getElementById('novoPerfilModeloBase')?.value || 'graziele';
+    let novaConfig;
+
+    if (modelo === 'sara' && DEFAULT_PROFILES.sara) {
+      novaConfig = JSON.parse(JSON.stringify(DEFAULT_PROFILES.sara));
+      novaConfig.dados.fotoPerfil = "assets/images/perfil.jpg";
+    } else if (modelo === 'atual') {
+      novaConfig = coletarConfigDoFormulario();
+    } else if (modelo === 'limpo') {
+      novaConfig = {
+        dados: {
+          nome: nome,
+          subtitulo: "Nail Designer Especialista",
+          whatsapp: "",
+          instagram: "",
+          cidade: "Atendimento com hora marcada",
+          endereco: "Atendimento com hora marcada",
+          fotoPerfil: "",
+          tituloHero: "Unhas perfeitas com o <em>cuidado</em> que você merece.",
+          descricaoHero: "Alongamento em fibra, gel e decorações exclusivas para realçar sua beleza."
+        },
+        cores: {
+          primaria: "#74467E",
+          secundaria: "#D98AA7",
+          destaque: "#E8A9BF",
+          fundo: "#FCFAFB",
+          texto: "#211324",
+          botaoBg: "#74467E",
+          botaoTexto: "#FFFFFF",
+          botaoHover: "#74467E",
+          tituloCor: "#211324",
+          tituloDestaque: "#74467E"
+        },
+        servicos: [
+          { nome: "Fibra de Vidro", categoria: "Alongamento", descricao: "Alongamento leve, resistente e acabamento fino e natural.", tempo: "Tempo médio: 2h00", preco: "R$ 150", destaque: true, badge: "Mais Pedido" },
+          { nome: "Unhas em Gel", categoria: "Alongamento", descricao: "Estrutura firme, brilho impecável e formato perfeito.", tempo: "Tempo médio: 2h00", preco: "R$ 140", destaque: false, badge: "" },
+          { nome: "Manutenção", categoria: "Cuidados", descricao: "Repõe o crescimento da unha e ajusta o formato.", tempo: "Tempo médio: 1h30", preco: "R$ 90", destaque: false, badge: "" }
+        ],
+        portfolio: [],
+        depoimentos: [],
+        faq: [
+          { pergunta: "Quanto tempo dura o alongamento?", resposta: "O alongamento dura por tempo indeterminado fazendo manutenções a cada 20 a 25 dias." },
+          { pergunta: "Como agendar?", resposta: "Basta escolher o serviço e horário aqui pelo site para enviar direto no WhatsApp." }
+        ],
+        agendamento: {
+          horariosPadrao: ['08:30', '10:00', '13:30', '15:00', '16:30', '18:00'],
+          atendeDomingo: false,
+          mensagemAviso: "Ao clicar abaixo você confirma o horário diretamente no WhatsApp."
+        }
+      };
+    } else {
+      // Default graziele
+      novaConfig = JSON.parse(JSON.stringify(DEFAULT_PROFILES.graziele));
+      novaConfig.dados.fotoPerfil = "assets/images/graziele_perfil.jpg";
+    }
+
+    novaConfig.dados.nome = nome;
+    novaConfig.dados.instagram = cleanKey;
+
+    profiles[cleanKey] = novaConfig;
+    localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+    localStorage.setItem('NAIL_ACTIVE_PROFILE_KEY', cleanKey);
+    currentActiveKey = cleanKey;
+
     renderProfileSelectOptions();
-    document.getElementById('profileSelector').value = cleanKey;
-    onProfileChange(cleanKey);
-    alert(`Perfil "${nome}" criado com sucesso!`);
+    const sel = document.getElementById('profileSelector');
+    if (sel) sel.value = cleanKey;
+    
+    carregarPerfilParaFormulario(novaConfig);
+    document.getElementById('novoPerfilModal').classList.remove('active');
+    mostrarToast(`✨ Perfil "${nome}" criado com sucesso!`);
+  }
+
+  function excluirPerfilAtual() {
+    const sel = document.getElementById('profileSelector');
+    const key = sel?.value;
+    if (!key) return;
+
+    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+    const nome = profiles[key]?.dados?.nome || key;
+
+    if (Object.keys(profiles).length <= 1) {
+      alert('Você não pode excluir o único perfil existente.');
+      return;
+    }
+
+    if (confirm(`Tem certeza que deseja excluir o perfil "${nome}"?`)) {
+      delete profiles[key];
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+      
+      const nextKey = Object.keys(profiles)[0];
+      currentActiveKey = nextKey;
+      localStorage.setItem('NAIL_ACTIVE_PROFILE_KEY', nextKey);
+      
+      renderProfileSelectOptions();
+      if (sel) sel.value = nextKey;
+      carregarPerfilParaFormulario(profiles[nextKey]);
+      mostrarToast(`🗑️ Perfil "${nome}" foi excluído.`);
+    }
   }
 
   /* ─── CARREGA CONFIG NOS CAMPOS ─── */
