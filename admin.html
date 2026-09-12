@@ -1928,17 +1928,29 @@
 
   function baixarIndexHtmlPronto() {
     const cfg = coletarConfigDoFormulario();
+    const currentKey = document.getElementById('profileSelector').value || 'cliente';
     const nome = cfg.dados.nome || 'Nail Designer';
     const subtitulo = cfg.dados.subtitulo || 'Especialista em Unhas';
     
+    let baseUrl = window.location.href.split('admin.html')[0];
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+    
+    // URL da foto de capa (og:image)
+    let ogImageUrl = `${baseUrl}clientes/${currentKey}/assets/images/perfil.jpg`;
+    if (currentKey === 'graziele') {
+      ogImageUrl = `${baseUrl}assets/images/graziele_perfil.jpg`;
+    }
+
     // Pega o template base de index.html
     fetch('index.html')
       .then(res => res.text())
       .then(html => {
         // Substitui o título e meta tags no head
         let customHtml = html.replace(/<title>.*?<\/title>/i, `<title>${nome} — ${subtitulo} 💅 | Unhas em Gel e Fibra</title>`);
+        customHtml = customHtml.replace(/<meta name="description".*?>/i, `<meta name="description" content="Unhas perfeitas com o cuidado que você merece. Alongamento em fibra, gel e decorações exclusivas por ${nome}." />`);
         customHtml = customHtml.replace(/<meta property="og:title".*?>/i, `<meta property="og:title" content="${nome} — ${subtitulo} 💅" />`);
         customHtml = customHtml.replace(/<meta property="og:description".*?>/i, `<meta property="og:description" content="Unhas lindas, fortes e naturais. Agende seu horário online no WhatsApp!" />`);
+        customHtml = customHtml.replace(/<meta property="og:image".*?>/i, `<meta property="og:image" content="${ogImageUrl}" />`);
         
         const blob = new Blob([customHtml], { type: 'text/html;charset=utf-8;' });
         const link = document.createElement('a');
