@@ -2103,7 +2103,7 @@
     }
 
     if (stepNum === 3) {
-      const prof = window.CURRENT_PROFILE || { nome: "Graziele", insta: "nail_grazii" };
+      const prof = window.CURRENT_PROFILE || { nome: "", insta: "" };
       document.getElementById('sumService').textContent = chosenService;
       document.getElementById('sumDate').textContent = `${dayNamesPtFull[chosenDate.getDay()]}, ${chosenDate.getDate()} de ${monthNamesPt[chosenDate.getMonth()]} de ${chosenDate.getFullYear()}`;
       document.getElementById('sumTime').textContent = chosenSlot;
@@ -2200,11 +2200,11 @@
 
     const d = cfg.dados || cfg || {};
 
-    const nome = urlParams.get('nome') || d.nome || "Graziele";
-    const whats = urlParams.get('whats') || d.whatsapp || "5515997949066";
-    const insta = urlParams.get('insta') || d.instagram || "nail_grazii";
-    const foto = urlParams.get('foto') || d.fotoPerfil || "assets/images/graziele_perfil.jpg";
-    const subtitulo = urlParams.get('subtitulo') || d.subtitulo || "Nail Designer Especialista";
+    const nome = urlParams.get('nome') || d.nome || "";
+    const whats = urlParams.get('whats') || d.whatsapp || "";
+    const insta = urlParams.get('insta') || d.instagram || "";
+    const foto = urlParams.get('foto') || d.fotoPerfil || "";
+    const subtitulo = urlParams.get('subtitulo') || d.subtitulo || "";
     const cidade = d.cidade || "Atendimento com hora marcada";
 
     window.CURRENT_PROFILE = { nome, whats, insta, foto, subtitulo, cidade };
@@ -2278,6 +2278,24 @@
 
     const sumNotice = document.getElementById('sumWhatsNotice');
     if (sumNotice) sumNotice.innerHTML = `Ao clicar abaixo, você vai direto para o WhatsApp da <strong>${nome}</strong> com a mensagem prontinha só para enviar! 💕`;
+
+    // 2.1 Statement Section & Footer
+    const statementSub = document.querySelector('.statement-sub');
+    if (statementSub) statementSub.textContent = `Agende seu horário com a ${nome} e venha ter as unhas que você sempre quis!`;
+
+    const footerCopyright = document.querySelector('.footer-bottom div:first-child');
+    if (footerCopyright) footerCopyright.textContent = `© ${new Date().getFullYear()} ${nome} — ${subtitulo} · Feito com carinho`;
+
+    // 2.2 Hero Headline
+    const heroHeadline = document.querySelector('.hero-headline');
+    if (heroHeadline && d.tituloHero) heroHeadline.innerHTML = d.tituloHero;
+
+    // 2.3 Meta Description & Title
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', `Unhas perfeitas com o cuidado que você merece. Alongamento em fibra, gel e decorações exclusivas por ${nome}.`);
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', `${nome} — ${subtitulo} 💅 | Unhas em Gel e Fibra`);
 
     // 3. Foto de Perfil (Suporta Base64, link e caminho)
     const profileImg = document.querySelector('.hero-image-inner img');
@@ -2437,7 +2455,7 @@
 
   /* ── ENVIO WHATSAPP COM NÚMERO DINÂMICO ── */
   function dispatchWhatsAppBooking() {
-    const prof = window.CURRENT_PROFILE || { nome: "Graziele", whats: "5515997949066" };
+    const prof = window.CURRENT_PROFILE || { nome: "", whats: "" };
     const clientName = document.getElementById('clientNameInput').value.trim();
     const formattedDate = `${dayNamesPtFull[chosenDate.getDay()]}, ${chosenDate.getDate()} de ${monthNamesPt[chosenDate.getMonth()]} de ${chosenDate.getFullYear()}`;
 
