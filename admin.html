@@ -572,6 +572,79 @@
       gap: 1rem;
     }
 
+    /* ─── CROP & AVATAR RE-ENQUADRAMENTO ─── */
+    .cropper-stage-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .cropper-viewport {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 0 9999px rgba(10, 5, 13, 0.75), 0 0 25px rgba(217, 138, 167, 0.4);
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      background: #180D1D;
+    }
+    .cropper-viewport:active {
+      cursor: grabbing;
+    }
+    .cropper-viewport-container {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      overflow: hidden;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cropper-image {
+      position: absolute;
+      transform-origin: center center;
+      pointer-events: none;
+      max-width: none;
+      max-height: none;
+    }
+    .cropper-controls-panel {
+      width: 100%;
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .cropper-control-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .cropper-control-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 70px;
+    }
+    .cropper-range {
+      flex-grow: 1;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .cropper-btns-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     @media (max-width: 900px) {
       .main-layout { grid-template-columns: 1fr; }
       .side-nav {
@@ -708,6 +781,9 @@
                 <input type="file" id="fileInputPerfil" accept="image/*" style="display:none;" onchange="handleFotoPerfilUpload(this)" />
                 <button type="button" class="btn-upload-file" onclick="document.getElementById('fileInputPerfil').click()">
                   📁 Fazer Upload da Foto
+                </button>
+                <button type="button" class="btn-upload-file" style="background:rgba(142,98,151,0.25); border-color:#8E6297;" onclick="abrirModalRecortarFotoAtual()">
+                  ✂️ Ajustar / Reenquadrar
                 </button>
                 <button type="button" class="btn-remove-item" onclick="limparFotoPerfil()">
                   Restaurar Padrão
@@ -1059,6 +1135,53 @@
     <div class="modal-footer">
       <button class="btn-top btn-preview" onclick="document.getElementById('novoPerfilModal').classList.remove('active')">Cancelar</button>
       <button class="btn-top btn-save-main" onclick="confirmarCriarNovoPerfil()">Criar Perfil ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL DE RECORTE & REENQUADRAMENTO DE FOTO ─── -->
+<div class="modal-backdrop" id="modalCropFoto" onclick="fecharModalCrop(event)">
+  <div class="modal-container" style="max-width: 540px;">
+    <div class="modal-header">
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">✂️ Ajustar / Reenquadrar Foto de Perfil</h3>
+      <button class="btn-remove-item" onclick="document.getElementById('modalCropFoto').classList.remove('active')">✕ Fechar</button>
+    </div>
+    <div class="modal-body" style="display:flex; flex-direction:column; align-items:center; gap:1.2rem;">
+      <p style="font-size:0.86rem; color:var(--text-muted); text-align:center;">
+        Arraste a foto para posicionar o rosto no centro do círculo e use o controle deslizante para dar zoom:
+      </p>
+
+      <!-- Viewport Circular com Máscara -->
+      <div class="cropper-stage-wrap">
+        <div class="cropper-viewport" id="cropViewport">
+          <img id="cropTargetImage" class="cropper-image" src="" alt="Foto para recortar" />
+        </div>
+      </div>
+
+      <!-- Controles de Ajuste -->
+      <div class="cropper-controls-panel">
+        <div class="cropper-control-row">
+          <span class="cropper-control-label">🔍 Zoom:</span>
+          <input type="range" id="cropZoomRange" class="cropper-range" min="0.5" max="3.0" step="0.02" value="1.0" oninput="onCropZoomChange(this.value)" />
+          <span id="cropZoomVal" style="font-size:0.8rem; color:#E8A9BF; min-width:40px; text-align:right;">100%</span>
+        </div>
+
+        <div class="cropper-btns-row">
+          <button type="button" class="btn-top btn-preview" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="rotacionarFotoCrop(-90)">
+            🔄 Girar -90°
+          </button>
+          <button type="button" class="btn-top btn-preview" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="rotacionarFotoCrop(90)">
+            🔄 Girar +90°
+          </button>
+          <button type="button" class="btn-top btn-preview" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="resetarCropAjustes()">
+            ↺ Centralizar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-top btn-preview" onclick="document.getElementById('modalCropFoto').classList.remove('active')">Cancelar</button>
+      <button class="btn-top btn-save-main" onclick="aplicarRecorteFotoPerfil()">💾 Aplicar e Salvar Foto</button>
     </div>
   </div>
 </div>
@@ -1561,15 +1684,218 @@
     });
   }
 
+  /* ─── SISTEMA INTERATIVO DE CROP & REENQUADRAMENTO DE FOTO ─── */
+  let cropState = {
+    img: null,
+    src: '',
+    naturalWidth: 0,
+    naturalHeight: 0,
+    zoom: 1.0,
+    rotation: 0,
+    posX: 0,
+    posY: 0,
+    isDragging: false,
+    startX: 0,
+    startY: 0
+  };
+
+  function abrirModalRecortarFoto(sourceSrc) {
+    const src = sourceSrc || document.getElementById('cfgFoto')?.value;
+    if (!src) {
+      alert('Nenhuma foto encontrada para recortar. Faça o upload de uma foto primeiro!');
+      return;
+    }
+
+    cropState.src = src;
+    cropState.zoom = 1.0;
+    cropState.rotation = 0;
+    cropState.posX = 0;
+    cropState.posY = 0;
+    cropState.isDragging = false;
+
+    const cropImg = document.getElementById('cropTargetImage');
+    const zoomRange = document.getElementById('cropZoomRange');
+    const zoomVal = document.getElementById('cropZoomVal');
+    
+    if (zoomRange) zoomRange.value = 1.0;
+    if (zoomVal) zoomVal.textContent = '100%';
+
+    cropImg.onload = function() {
+      cropState.naturalWidth = cropImg.naturalWidth;
+      cropState.naturalHeight = cropImg.naturalHeight;
+      atualizarTransformCrop();
+      document.getElementById('modalCropFoto').classList.add('active');
+    };
+    cropImg.src = src;
+
+    iniciarEventosDragCrop();
+  }
+
+  function abrirModalRecortarFotoAtual() {
+    const src = document.getElementById('cfgFoto')?.value;
+    abrirModalRecortarFoto(src);
+  }
+
+  function fecharModalCrop(e) {
+    if (e.target === document.getElementById('modalCropFoto')) {
+      document.getElementById('modalCropFoto').classList.remove('active');
+    }
+  }
+
+  function onCropZoomChange(val) {
+    cropState.zoom = parseFloat(val);
+    const zoomVal = document.getElementById('cropZoomVal');
+    if (zoomVal) zoomVal.textContent = Math.round(cropState.zoom * 100) + '%';
+    atualizarTransformCrop();
+  }
+
+  function rotacionarFotoCrop(graus) {
+    cropState.rotation = (cropState.rotation + graus) % 360;
+    atualizarTransformCrop();
+  }
+
+  function resetarCropAjustes() {
+    cropState.zoom = 1.0;
+    cropState.rotation = 0;
+    cropState.posX = 0;
+    cropState.posY = 0;
+    const zoomRange = document.getElementById('cropZoomRange');
+    const zoomVal = document.getElementById('cropZoomVal');
+    if (zoomRange) zoomRange.value = 1.0;
+    if (zoomVal) zoomVal.textContent = '100%';
+    atualizarTransformCrop();
+  }
+
+  function atualizarTransformCrop() {
+    const cropImg = document.getElementById('cropTargetImage');
+    if (!cropImg) return;
+    
+    // Viewport de 320x320
+    const vpSize = 320;
+    const nw = cropState.naturalWidth || 320;
+    const nh = cropState.naturalHeight || 320;
+
+    // Escala base para cobrir o círculo
+    const baseScale = Math.max(vpSize / nw, vpSize / nh);
+    const currentScale = baseScale * cropState.zoom;
+
+    cropImg.style.width = `${nw * currentScale}px`;
+    cropImg.style.height = `${nh * currentScale}px`;
+    cropImg.style.left = `calc(50% - ${(nw * currentScale) / 2}px + ${cropState.posX}px)`;
+    cropImg.style.top = `calc(50% - ${(nh * currentScale) / 2}px + ${cropState.posY}px)`;
+    cropImg.style.transform = `rotate(${cropState.rotation}deg)`;
+  }
+
+  let dragEventsBound = false;
+  function iniciarEventosDragCrop() {
+    if (dragEventsBound) return;
+    dragEventsBound = true;
+
+    const viewport = document.getElementById('cropViewport');
+    if (!viewport) return;
+
+    // Mouse events
+    viewport.addEventListener('mousedown', (e) => {
+      cropState.isDragging = true;
+      cropState.startX = e.clientX - cropState.posX;
+      cropState.startY = e.clientY - cropState.posY;
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!cropState.isDragging) return;
+      cropState.posX = e.clientX - cropState.startX;
+      cropState.posY = e.clientY - cropState.startY;
+      atualizarTransformCrop();
+    });
+
+    window.addEventListener('mouseup', () => {
+      cropState.isDragging = false;
+    });
+
+    // Touch events (Mobile)
+    viewport.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        cropState.isDragging = true;
+        cropState.startX = e.touches[0].clientX - cropState.posX;
+        cropState.startY = e.touches[0].clientY - cropState.posY;
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!cropState.isDragging || e.touches.length !== 1) return;
+      cropState.posX = e.touches[0].clientX - cropState.startX;
+      cropState.posY = e.touches[0].clientY - cropState.startY;
+      atualizarTransformCrop();
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      cropState.isDragging = false;
+    });
+
+    // Zoom com a roda do mouse
+    viewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY * -0.0015;
+      const newZoom = Math.min(Math.max(cropState.zoom + delta, 0.5), 3.0);
+      const zoomRange = document.getElementById('cropZoomRange');
+      if (zoomRange) zoomRange.value = newZoom;
+      onCropZoomChange(newZoom);
+    }, { passive: false });
+  }
+
+  function aplicarRecorteFotoPerfil() {
+    const cropImg = document.getElementById('cropTargetImage');
+    if (!cropImg) return;
+
+    const outputSize = 600; // Tamanho ideal nítido e otimizado (600x600 px)
+    const vpSize = 320;
+    const scaleRatio = outputSize / vpSize;
+
+    const nw = cropState.naturalWidth || 320;
+    const nh = cropState.naturalHeight || 320;
+    const baseScale = Math.max(vpSize / nw, vpSize / nh);
+    const currentScale = baseScale * cropState.zoom;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = outputSize;
+    canvas.height = outputSize;
+    const ctx = canvas.getContext('2d');
+
+    // Limpa fundo
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, outputSize, outputSize);
+
+    ctx.save();
+    // Translação para o centro do canvas com o deslocamento ajustado
+    ctx.translate(outputSize / 2 + cropState.posX * scaleRatio, outputSize / 2 + cropState.posY * scaleRatio);
+    ctx.rotate((cropState.rotation * Math.PI) / 180);
+
+    const renderW = nw * currentScale * scaleRatio;
+    const renderH = nh * currentScale * scaleRatio;
+
+    ctx.drawImage(cropImg, -renderW / 2, -renderH / 2, renderW, renderH);
+    ctx.restore();
+
+    const croppedBase64 = canvas.toDataURL('image/jpeg', 0.88);
+
+    document.getElementById('cfgFoto').value = croppedBase64;
+    atualizarAvatarPreview(croppedBase64);
+    salvarPerfilSilencioso();
+
+    document.getElementById('modalCropFoto').classList.remove('active');
+    mostrarToast('✨ Foto de perfil ajustada e salva com sucesso!');
+  }
+
   /* ─── UPLOAD DE FOTOS (BASE64 DATA URLS OTIMIZADAS) ─── */
   async function handleFotoPerfilUpload(input) {
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const base64 = await comprimirImagemParaWeb(file, 800, 0.85);
-      document.getElementById('cfgFoto').value = base64;
-      atualizarAvatarPreview(base64);
-      salvarPerfilSilencioso();
-      mostrarToast('📸 Foto de perfil otimizada e salva!');
+      const base64 = await comprimirImagemParaWeb(file, 1200, 0.90);
+      
+      // Abre o modal de recorte automaticamente com a nova foto
+      abrirModalRecortarFoto(base64);
+      input.value = '';
     }
   }
 
