@@ -2349,8 +2349,8 @@
 
     document.getElementById('sharePitchText').value = pitch;
 
-    // Gera o comando de deploy no CMD
-    const gitCmd = `git add . && git commit -m "feat: site da ${cfg.dados.nome}" && git push`;
+    // Gera o comando de deploy no CMD já entrando na pasta correta do repositório
+    const gitCmd = `cd /d "C:\\Users\\amd\\.gemini\\antigravity\\scratch\\nail_grazii" && git add . && git commit -m "feat: site da ${cfg.dados.nome}" && git push`;
     const cmdBox = document.getElementById('gitDeployCmdBox');
     if (cmdBox) cmdBox.value = gitCmd;
 
@@ -2369,11 +2369,12 @@
     const cfg = coletarConfigDoFormulario();
     const nome = cfg.dados.nome || 'cliente';
     
-    // Conteúdo do arquivo .bat interativo para o CMD do Windows
+    // Conteúdo do arquivo .bat interativo para o CMD do Windows (entra na pasta exata do projeto)
     const batContent = `@echo off\r\n` +
       `chcp 65001 > nul\r\n` +
       `title Publicando Site da ${nome} no GitHub Pages...\r\n` +
       `color 0D\r\n` +
+      `cd /d "C:\\Users\\amd\\.gemini\\antigravity\\scratch\\nail_grazii"\r\n` +
       `echo =====================================================================\r\n` +
       `echo 🚀 SUBINDO SITE DA ${nome.toUpperCase()} PARA O GITHUB PAGES...\r\n` +
       `echo =====================================================================\r\n` +
