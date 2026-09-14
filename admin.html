@@ -650,6 +650,138 @@
       justify-content: center;
     }
 
+    /* ─── TEMPLATES ─── */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+    .template-card {
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .template-card.active {
+      border-color: rgba(255, 255, 255, 0.45);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+    .template-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .template-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .template-use-badge {
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0A0A0A;
+      background: #FFFFFF;
+      border-radius: 50px;
+      padding: 0.25rem 0.6rem;
+      white-space: nowrap;
+    }
+    .template-card-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .template-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.2rem;
+    }
+    .template-actions .btn-top {
+      padding: 0.5rem 0.85rem;
+      font-size: 0.8rem;
+    }
+    .template-add-card {
+      background: transparent;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      color: #FFFFFF;
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding: 1rem;
+    }
+    .template-add-card:hover {
+      border-color: rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .template-doc {
+      background: var(--card-sub);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.4rem;
+      margin-top: 1.8rem;
+    }
+    .template-doc h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-bottom: 0.5rem;
+    }
+    .template-doc ol {
+      padding-left: 1.3rem;
+      margin-top: 0.4rem;
+    }
+    .template-doc li {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+    .template-doc code {
+      background: #0A0A0A;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.82rem;
+      color: #E4E4E7;
+    }
+
+    .template-text-field {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .template-text-field:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .template-text-field label {
+      margin-bottom: 0.35rem;
+      display: block;
+    }
+    #templateHtmlTextarea {
+      width: 100%;
+      min-height: 420px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      tab-size: 2;
+    }
+
     @media (max-width: 900px) {
       .top-header { padding: 0.75rem 1rem; }
 
@@ -846,6 +978,9 @@
     </button>
     <button class="nav-tab-btn" onclick="switchTab('tabFaq', this)">
       <span>Dúvidas (FAQ)</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('tabTemplates', this)">
+      <span>Templates</span>
     </button>
   </aside>
 
@@ -1170,6 +1305,30 @@
       <button class="btn-add-item" onclick="adicionarFaqItem()">Adicionar Nova Pergunta</button>
     </div>
 
+    <!-- ── TAB 7: TEMPLATES ── -->
+    <div class="panel-section" id="tabTemplates">
+      <h2 class="section-title">Templates de Site</h2>
+      <p class="section-subtitle">Modelos de layout usados para gerar os sites das clientes. Escolha o template do perfil atual e edite todos os textos dele.</p>
+
+      <input type="hidden" id="cfgTemplate" value="classico" />
+
+      <div class="template-grid" id="templatesGrid"></div>
+
+      <button class="template-add-card" onclick="abrirNovoTemplateModal()">+ Adicionar Novo Template</button>
+
+      <div class="template-doc">
+        <h3>Como um template deve ser criado para funcionar</h3>
+        <ol>
+          <li>Crie uma pasta em <code>templates/&lt;id-do-template&gt;/</code> contendo o arquivo <code>index.html</code> do site (e as pastas de imagens que ele usar). O template atual (<strong>Clássico</strong>) é o <code>index.html</code> da raiz e serve de exemplo completo.</li>
+          <li>Mantenha os 3 blocos que fazem o site funcionar como os atuais: o <code>&lt;script src="config.js"&gt;&lt;/script&gt;</code>, o bloco <code>initDynamicProfile()</code> com o preview live (token <code>pv</code>) e as funções de agendamento (booking) e lightbox. Você pode reutilizar copiando do arquivo de uma cliente existente.</li>
+          <li>Marque cada texto que o painel deve permitir editar com o atributo <code>data-text="chave"</code> no elemento, e opcionalmente <code>data-label="Nome amigável"</code>. Ex.: <code>&lt;h2 data-text="sobreTitulo" data-label="Título da seção Sobre Mim"&gt;Cuidado e capricho&lt;/h2&gt;</code>.</li>
+          <li>Adicione no fim do <code>initDynamicProfile()</code> o aplicador de textos (<code>document.querySelectorAll('[data-text]')</code> lendo <code>cfg.conteudo</code>) — já existe no template Clássico.</li>
+          <li>Cadastre o template no painel com <strong>+ Adicionar Novo Template</strong> (utilize o mesmo id da pasta), personalize em <strong>Editar Textos</strong> e <strong>HTML</strong>, e use <strong>Baixar index.html</strong> para gerar o arquivo que deverá ficar em <code>templates/&lt;id&gt;/index.html</code>.</li>
+          <li>Selecione o template no perfil desejado, gere o <code>config.js</code> da cliente e rode o Deploy (publicar.bat). O site usa <code>cfg.conteudo</code> para aplicar os textos editados automaticamente.</li>
+        </ol>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -1258,6 +1417,12 @@
           <option value="limpo">Perfil em Branco / Limpo</option>
         </select>
       </div>
+    <div style="margin-bottom: 1rem;">
+        <label style="color:var(--text-muted); margin-bottom:0.4rem; display:block; font-size:0.84rem;">Usar qual template visual?</label>
+        <select id="novoPerfilTemplateSelect" style="width:100%; background:var(--card-sub); border:1px solid var(--border); color:#FFFFFF; padding:0.7rem 1rem; border-radius:10px; outline:none;">
+          <!-- Preenchido via JS -->
+        </select>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn-top btn-preview" onclick="document.getElementById('novoPerfilModal').classList.remove('active')">Cancelar</button>
@@ -1309,6 +1474,72 @@
     <div class="modal-footer">
       <button class="btn-top btn-preview" onclick="document.getElementById('modalCropFoto').classList.remove('active')">Cancelar</button>
       <button class="btn-top btn-save-main" onclick="aplicarRecorteFotoPerfil()">Aplicar e Salvar Foto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL DE NOVO TEMPLATE ─── -->
+<div class="modal-backdrop" id="novoTemplateModal" onclick="fecharNovoTemplateModal(event)">
+  <div class="modal-container" style="max-width: 560px;">
+    <div class="modal-header">
+      <h3 style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Adicionar Novo Template</h3>
+      <button class="btn-remove-item" onclick="document.getElementById('novoTemplateModal').classList.remove('active')">✕ Fechar</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label>Nome do Template</label>
+        <input type="text" id="novoTemplateNomeInput" placeholder="Ex: Minimalista Branco" style="width:100%;" oninput="sugerirIdTemplate()" />
+      </div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label>Pasta / ID (o site fica em templates/&lt;id&gt;/index.html)</label>
+        <input type="text" id="novoTemplateIdInput" placeholder="Ex: minimalista_branco" style="width:100%; font-family:monospace;" oninput="document.getElementById('novoTemplateIdInput').dataset.touched='1'" />
+      </div>
+      <div class="form-group" style="margin-bottom:1rem; flex-direction:row; align-items:center; gap:0.6rem;">
+        <input type="checkbox" id="novoTemplateCloneChk" checked style="width:18px; height:18px;" />
+        <label style="margin:0; text-transform:none;">Começar clonando o template Clássico para personalizar</label>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.6;">
+        Ao cadastrar, o template fica salvo neste navegador. Depois use <strong>Editar Textos</strong> e <strong>Editar HTML</strong> na aba Templates para personalizar, e <strong>Baixar index.html</strong> para gerar o arquivo que deve ficar em <code>templates/&lt;id&gt;/index.html</code> (publique com o Deploy). Veja o passo a passo completo na caixa "Como um template deve ser criado".
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-top btn-preview" onclick="document.getElementById('novoTemplateModal').classList.remove('active')">Cancelar</button>
+      <button class="btn-top btn-save-main" onclick="confirmarCriarNovoTemplate()">Cadastrar Template</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL DE EDIÇÃO DE TEXTOS DO TEMPLATE ─── -->
+<div class="modal-backdrop" id="templateTextsModal" onclick="fecharTemplateTextsModal(event)">
+  <div class="modal-container" style="max-width: 720px;">
+    <div class="modal-header">
+      <h3 id="templateTextsTitle" style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Editar Textos do Template</h3>
+      <button class="btn-remove-item" onclick="document.getElementById('templateTextsModal').classList.remove('active')">✕ Fechar</button>
+    </div>
+    <div class="modal-body" id="templateTextsBody" style="padding-top:1.3rem;"></div>
+    <div class="modal-footer">
+      <button class="btn-top btn-preview" onclick="document.getElementById('templateTextsModal').classList.remove('active')">Cancelar</button>
+      <button class="btn-top btn-save-main" onclick="salvarTextosTemplate()">Salvar Textos</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MODAL DE EDIÇÃO DE HTML DO TEMPLATE ─── -->
+<div class="modal-backdrop" id="templateHtmlModal" onclick="fecharTemplateHtmlModal(event)">
+  <div class="modal-container" style="max-width: 900px;">
+    <div class="modal-header">
+      <h3 id="templateHtmlTitle" style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Editar HTML do Template</h3>
+      <button class="btn-remove-item" onclick="document.getElementById('templateHtmlModal').classList.remove('active')">✕ Fechar</button>
+    </div>
+    <div class="modal-body" style="padding-top:1rem;">
+      <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:0.8rem;">
+        Edite o HTML inteiro do template. Para os textos editáveis use <code>data-text="chave"</code> (+ <code>data-label</code> opcional). Ao salvar fica guardado neste navegador.
+      </p>
+      <textarea id="templateHtmlTextarea" spellcheck="false" style="background:#0A0A0A; border:1px solid var(--border); color:#E4E4E7; border-radius:6px; padding:1rem; resize:vertical;"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-top btn-preview" onclick="document.getElementById('templateHtmlModal').classList.remove('active')">Cancelar</button>
+      <button class="btn-top btn-save-main" onclick="salvarHtmlTemplate()">Salvar HTML</button>
     </div>
   </div>
 </div>
@@ -1462,12 +1693,14 @@
       } else if (DEFAULT_PROFILES.graziele) {
         carregarPerfilParaFormulario(DEFAULT_PROFILES.graziele);
       }
+      renderNovaTemplateOptions();
     } catch (err) {
       console.error('Erro ao inicializar perfis:', err);
       // Fallback de emergência em caso de dados corrompidos
       localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(DEFAULT_PROFILES));
       renderProfileSelectOptions();
       if (DEFAULT_PROFILES.graziele) carregarPerfilParaFormulario(DEFAULT_PROFILES.graziele);
+      renderNovaTemplateOptions();
     }
   }
 
@@ -1508,6 +1741,7 @@
   }
 
   function abrirModalNovoPerfil() {
+    renderNovaTemplateOptions();
     const input = document.getElementById('novoPerfilNomeInput');
     if (input) input.value = '';
     document.getElementById('novoPerfilModal').classList.add('active');
@@ -1603,6 +1837,8 @@
 
     novaConfig.dados.nome = nome;
     novaConfig.dados.instagram = cleanKey;
+    novaConfig.template = document.getElementById('novoPerfilTemplateSelect')?.value || 'classico';
+    novaConfig.conteudo = {};
 
     profiles[cleanKey] = novaConfig;
     localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
@@ -1683,6 +1919,9 @@
     renderDepoimentosStack(cfg.depoimentos || []);
     // FAQ
     renderFaqStack(cfg.faq || []);
+    // Template
+    const cfgTemplateInput = document.getElementById('cfgTemplate');
+    if (cfgTemplateInput) cfgTemplateInput.value = cfg.template || 'classico';
   }
 
   /* ─── COLETA DADOS DO FORMULÁRIO ─── */
@@ -1759,7 +1998,9 @@
         horariosPadrao: ['08:30', '09:45', '11:00', '13:30', '14:45', '16:00', '17:15', '18:30'],
         atendeDomingo: false,
         mensagemAviso: "Ao clicar abaixo você confirma o horário diretamente no WhatsApp."
-      }
+      },
+      template: document.getElementById('cfgTemplate')?.value || 'classico',
+      conteudo: {}
     };
   }
 
@@ -2343,6 +2584,10 @@
     document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
+    if (tabId === 'tabTemplates') {
+      renderTemplatesTab();
+      renderNovaTemplateOptions();
+    }
   }
 
   /* ─── EXPORTAÇÃO & SALVAMENTO ─── */
@@ -2406,37 +2651,25 @@
   function baixarIndexHtmlPronto() {
     const cfg = coletarConfigDoFormulario();
     const currentKey = document.getElementById('profileSelector').value || 'cliente';
-    const nome = cfg.dados.nome || 'Nail Designer';
-    const subtitulo = cfg.dados.subtitulo || 'Especialista em Unhas';
-    
+    const template = obterTemplateAtual();
+
     let baseUrl = window.location.href.split('admin.html')[0];
     if (!baseUrl.endsWith('/')) baseUrl += '/';
-    
-    // URL da foto de capa (og:image)
-    let ogImageUrl = `${baseUrl}clientes/${currentKey}/perfil.jpg`;
-    if (currentKey === 'graziele') {
-      ogImageUrl = `${baseUrl}assets/images/graziele_perfil.jpg`;
-    }
 
-    // Pega o template base de index.html
-    fetch('index.html')
-      .then(res => res.text())
+    obterTemplateHtml(template.id)
       .then(html => {
-        // Substitui o título e meta tags no head
-        let customHtml = html.replace(/<title>.*?<\/title>/i, `<title>${nome} — ${subtitulo} | Unhas em Gel e Fibra</title>`);
-        customHtml = customHtml.replace(/<meta name="description".*?>/i, `<meta name="description" content="Unhas perfeitas com o cuidado que você merece. Alongamento em fibra, gel e decorações exclusivas por ${nome}." />`);
-        customHtml = customHtml.replace(/<meta property="og:title".*?>/i, `<meta property="og:title" content="${nome} — ${subtitulo}" />`);
-        customHtml = customHtml.replace(/<meta property="og:description".*?>/i, `<meta property="og:description" content="Unhas lindas, fortes e naturais. Agende seu horário online no WhatsApp!" />`);
-        customHtml = customHtml.replace(/<meta property="og:image".*?>/i, `<meta property="og:image" content="${ogImageUrl}" />`);
-        
-        const blob = new Blob([customHtml], { type: 'text/html;charset=utf-8;' });
+        // Aplica os textos personalizados do template
+        html = aplicarTextosNoHtml(html, obterTextosTemplate(template.id));
+        // Substitui o título e meta tags no head com os dados do perfil
+        html = gerarHtmlComMetaCliente(html, cfg, baseUrl, currentKey);
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'index.html';
         link.click();
       })
       .catch(() => {
-        alert('Não foi possível carregar o template do index.html. Use o arquivo da pasta raiz ou de outra cliente.');
+        alert('Não foi possível carregar o template "' + (template.nome || template.id) + '". Use o arquivo da pasta raiz ou de outra cliente.');
       });
   }
 
@@ -2478,12 +2711,17 @@
     if (!baseUrl.endsWith('/')) baseUrl += '/';
 
     let siteUrl;
-    if (currentKey === 'graziele') {
-      siteUrl = `${baseUrl}index.html?preview=live`;
-    } else if (currentKey) {
-      siteUrl = `${baseUrl}clientes/${currentKey}/index.html?preview=live`;
+    const template = obterTemplateAtual();
+    if (template.id === 'classico') {
+      if (currentKey === 'graziele') {
+        siteUrl = `${baseUrl}index.html?preview=live`;
+      } else if (currentKey) {
+        siteUrl = `${baseUrl}clientes/${currentKey}/index.html?preview=live`;
+      } else {
+        siteUrl = `${baseUrl}index.html?preview=live`;
+      }
     } else {
-      siteUrl = `${baseUrl}index.html?preview=live`;
+      siteUrl = `${baseUrl}templates/${template.id}/index.html?preview=live`;
     }
 
     const params = `&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}&pv=${previewToken}`;
@@ -2641,7 +2879,9 @@
   let autosaveTimer = null;
   document.addEventListener('input', (e) => {
     // Ignora inputs de busca ou modais que não pertencem à config
-    if (e.target.closest('#shareModal') || e.target.closest('#codeModal')) return;
+    if (e.target.closest('#shareModal') || e.target.closest('#codeModal') ||
+        e.target.closest('#templateTextsModal') || e.target.closest('#templateHtmlModal') ||
+        e.target.closest('#novoTemplateModal')) return;
     clearTimeout(autosaveTimer);
     autosaveTimer = setTimeout(() => {
       salvarPerfilSilencioso();
@@ -2655,6 +2895,448 @@
       localStorage.removeItem('NAIL_LIVE_PREVIEW_CONFIG');
       location.reload();
     }
+  }
+
+  /* ═══════════════════════════════════════════════════ */
+  /* TEMPLATES DE SITE                                   */
+  /* ═══════════════════════════════════════════════════ */
+
+  const GLOBAL_TEMPLATES = [
+    {
+      id: 'classico',
+      nome: 'Clássico Rosé & Lilás',
+      descricao: 'Layout atual da Graziele: hero com frase de efeito, pilares de qualidade, serviços, galeria, avaliações, FAQ e frase final. Arquivo de referência: index.html da raiz.',
+      arquivo: 'index.html'
+    }
+  ];
+
+  const NAIL_TEMPLATES_KEY = 'NAIL_TEMPLATES';
+  const NAIL_TEMPLATES_HTML_PREFIX = 'NAIL_TEMPLATES_HTML__';
+  const NAIL_TEMPLATES_TEXTS_PREFIX = 'NAIL_TEMPLATE_TEXTS__';
+
+  function slugificar(texto) {
+    return String(texto).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  }
+
+  function obterTemplates() {
+    return GLOBAL_TEMPLATES.concat(obterTemplatesCustom());
+  }
+
+  function obterTemplatesCustom() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(NAIL_TEMPLATES_KEY) || '[]');
+      return Array.isArray(raw) ? raw.filter(t => t && t.id) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function obterTemplatePorId(id) {
+    return obterTemplates().find(t => t.id === id) || null;
+  }
+
+  function obterTemplateAtual() {
+    const sel = document.getElementById('cfgTemplate');
+    const id = (sel && sel.value) || 'classico';
+    return obterTemplatePorId(id) || GLOBAL_TEMPLATES[0];
+  }
+
+  function obterTemplateHtmlLocal(id) {
+    try {
+      return localStorage.getItem(NAIL_TEMPLATES_HTML_PREFIX + id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function obterTextosTemplate(id) {
+    try {
+      const raw = localStorage.getItem(NAIL_TEMPLATES_TEXTS_PREFIX + id);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function salvarTextosTemplateStorage(id, textos) {
+    try {
+      localStorage.setItem(NAIL_TEMPLATES_TEXTS_PREFIX + id, JSON.stringify(textos || {}));
+    } catch (e) {
+      mostrarToast('Atenção: não foi possível salvar os textos (armazenamento cheio).');
+    }
+  }
+
+  async function obterTemplateHtml(id) {
+    const local = obterTemplateHtmlLocal(id);
+    if (local) return local;
+
+    let baseUrl = window.location.href.split('admin.html')[0];
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+    const candidatos = id === 'classico'
+      ? ['index.html']
+      : [`${baseUrl}templates/${id}/index.html`, 'index.html'];
+    for (const url of candidatos) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) return await res.text();
+      } catch (e) {}
+    }
+    throw new Error('Template HTML não encontrado');
+  }
+
+  function aplicarTextosNoHtml(html, textos) {
+    const chaves = Object.keys(textos || {});
+    if (!chaves.length) return html;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    doc.querySelectorAll('[data-text]').forEach(el => {
+      const k = el.getAttribute('data-text');
+      if (textos[k] != null) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.value = textos[k];
+        } else {
+          el.innerHTML = textos[k];
+        }
+      }
+    });
+    return '<!doctype html>\n' + new XMLSerializer().serializeToString(doc.documentElement);
+  }
+
+  function gerarHtmlComMetaCliente(html, cfg, baseUrl, currentKey) {
+    const nome = cfg.dados.nome || 'Nail Designer';
+    const subtitulo = cfg.dados.subtitulo || 'Especialista em Unhas';
+    let ogImageUrl = `${baseUrl}clientes/${currentKey}/perfil.jpg`;
+    if (currentKey === 'graziele') {
+      ogImageUrl = `${baseUrl}assets/images/graziele_perfil.jpg`;
+    }
+    let out = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${nome} — ${subtitulo} | Unhas em Gel e Fibra</title>`);
+    out = out.replace(/<meta name="description"[\s\S]*?>/i, `<meta name="description" content="Unhas perfeitas com o cuidado que você merece. Alongamento em fibra, gel e decorações exclusivas por ${nome}." />`);
+    out = out.replace(/<meta property="og:title"[\s\S]*?>/i, `<meta property="og:title" content="${nome} — ${subtitulo}" />`);
+    out = out.replace(/<meta property="og:description"[\s\S]*?>/i, `<meta property="og:description" content="Unhas lindas, fortes e naturais. Agende seu horário online no WhatsApp!" />`);
+    out = out.replace(/<meta property="og:image"[\s\S]*?>/i, `<meta property="og:image" content="${ogImageUrl}" />`);
+    return out;
+  }
+
+  function renderTemplatesTab() {
+    const grid = document.getElementById('templatesGrid');
+    if (!grid) return;
+    const cfgInput = document.getElementById('cfgTemplate');
+    const ativoId = (cfgInput && cfgInput.value) || 'classico';
+    const templates = obterTemplates();
+    grid.innerHTML = '';
+
+    templates.forEach(t => {
+      const ativo = t.id === ativoId;
+      const card = document.createElement('div');
+      card.className = 'template-card' + (ativo ? ' active' : '');
+
+      const head = document.createElement('div');
+      head.className = 'template-card-head';
+      const title = document.createElement('span');
+      title.className = 'template-card-title';
+      title.textContent = t.nome;
+      head.appendChild(title);
+      if (ativo) {
+        const badge = document.createElement('span');
+        badge.className = 'template-use-badge';
+        badge.textContent = 'Em uso';
+        head.appendChild(badge);
+      }
+      card.appendChild(head);
+
+      const desc = document.createElement('div');
+      desc.className = 'template-card-desc';
+      desc.textContent = t.descricao || 'Template de site.';
+      card.appendChild(desc);
+
+      const actions = document.createElement('div');
+      actions.className = 'template-actions';
+
+      if (!ativo) {
+        const btnUsar = document.createElement('button');
+        btnUsar.className = 'btn-top';
+        btnUsar.textContent = 'Usar neste perfil';
+        btnUsar.onclick = () => selecionarTemplatePerfil(t.id);
+        actions.appendChild(btnUsar);
+      }
+
+      const btnTextos = document.createElement('button');
+      btnTextos.className = 'btn-top';
+      btnTextos.textContent = 'Editar Textos';
+      btnTextos.onclick = () => abrirEditorTextosTemplate(t.id);
+      actions.appendChild(btnTextos);
+
+      const btnHtml = document.createElement('button');
+      btnHtml.className = 'btn-top';
+      btnHtml.textContent = 'Editar HTML';
+      btnHtml.onclick = () => abrirEditorHtmlTemplate(t.id);
+      actions.appendChild(btnHtml);
+
+      const btnBaixar = document.createElement('button');
+      btnBaixar.className = 'btn-top';
+      btnBaixar.textContent = 'Baixar index.html';
+      btnBaixar.onclick = () => baixarArquivoTemplate(t.id);
+      actions.appendChild(btnBaixar);
+
+      if (!GLOBAL_TEMPLATES.some(g => g.id === t.id)) {
+        const btnDel = document.createElement('button');
+        btnDel.className = 'btn-top btn-remove-item';
+        btnDel.textContent = 'Excluir';
+        btnDel.onclick = () => excluirTemplate(t.id);
+        actions.appendChild(btnDel);
+      }
+
+      card.appendChild(actions);
+      grid.appendChild(card);
+    });
+  }
+
+  function renderNovaTemplateOptions() {
+    const sel = document.getElementById('novoPerfilTemplateSelect');
+    if (!sel) return;
+    const cfgInput = document.getElementById('cfgTemplate');
+    const ativoId = (cfgInput && cfgInput.value) || 'classico';
+    sel.innerHTML = '';
+    const templates = obterTemplates();
+    templates.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.nome;
+      sel.appendChild(opt);
+    });
+    sel.value = ativoId;
+  }
+
+  function selecionarTemplatePerfil(id) {
+    const inp = document.getElementById('cfgTemplate');
+    if (inp) inp.value = id;
+    renderTemplatesTab();
+    renderNovaTemplateOptions();
+    salvarPerfilSilencioso();
+    mostrarToast('Template "' + (obterTemplatePorId(id) ? obterTemplatePorId(id).nome : id) + '" aplicado ao perfil atual.');
+  }
+
+  function abrirNovoTemplateModal() {
+    const nomeInp = document.getElementById('novoTemplateNomeInput');
+    const idInp = document.getElementById('novoTemplateIdInput');
+    if (nomeInp) nomeInp.value = '';
+    if (idInp) idInp.value = '';
+    document.getElementById('novoTemplateModal').classList.add('active');
+    setTimeout(() => { if (nomeInp) nomeInp.focus(); }, 150);
+  }
+
+  function fecharNovoTemplateModal(e) {
+    if (e.target === document.getElementById('novoTemplateModal')) {
+      document.getElementById('novoTemplateModal').classList.remove('active');
+    }
+  }
+
+  function sugerirIdTemplate() {
+    const nomeInp = document.getElementById('novoTemplateNomeInput');
+    const idInp = document.getElementById('novoTemplateIdInput');
+    if (!nomeInp || !idInp) return;
+    if (idInp.dataset.touched === '1') return;
+    idInp.value = slugificar(nomeInp.value);
+  }
+
+  function confirmarCriarNovoTemplate() {
+    const nome = document.getElementById('novoTemplateNomeInput').value.trim();
+    const idRaw = document.getElementById('novoTemplateIdInput').value.trim();
+    const id = slugificar(idRaw || document.getElementById('novoTemplateNomeInput').value.trim());
+    if (!nome || !id) {
+      alert('Preencha o nome e o id do template.');
+      return;
+    }
+    if (obterTemplatePorId(id)) {
+      alert('Já existe um template com este id. Escolha outro nome.');
+      return;
+    }
+    const clone = document.getElementById('novoTemplateCloneChk').checked;
+
+    function registrarNovoTemplate(html) {
+      if (clone && html) {
+        try {
+          localStorage.setItem(NAIL_TEMPLATES_HTML_PREFIX + id, html);
+        } catch (e) {
+          alert('Não foi possível salvar o HTML clonado (armazenamento cheio).');
+          return;
+        }
+      }
+      const extras = obterTemplatesCustom();
+      extras.push({
+        id: id,
+        nome: nome,
+        descricao: 'Template personalizado criado no painel. Personalize em "Editar Textos" e "Editar HTML", depois publique o arquivo em templates/' + id + '/index.html usando "Baixar index.html".'
+      });
+      try {
+        localStorage.setItem(NAIL_TEMPLATES_KEY, JSON.stringify(extras));
+      } catch (e) {
+        alert('Não foi possível salvar o registro do template (armazenamento cheio).');
+        return;
+      }
+      document.getElementById('novoTemplateModal').classList.remove('active');
+      renderTemplatesTab();
+      renderNovaTemplateOptions();
+      mostrarToast('Template "' + nome + '" cadastrado!');
+    }
+
+    if (clone) {
+      obterTemplateHtml('classico')
+        .then(registrarNovoTemplate)
+        .catch(() => {
+          alert('Não foi possível carregar o template Clássico para clonar.');
+        });
+    } else {
+      registrarNovoTemplate(null);
+    }
+  }
+
+  function excluirTemplate(id) {
+    const t = obterTemplatePorId(id);
+    if (!t || GLOBAL_TEMPLATES.some(g => g.id === id)) return;
+    const nome = t.nome || id;
+    if (!confirm('Excluir o template "' + nome + '" deste navegador?')) return;
+    const extras = obterTemplatesCustom().filter(x => x.id !== id);
+    localStorage.setItem(NAIL_TEMPLATES_KEY, JSON.stringify(extras));
+    localStorage.removeItem(NAIL_TEMPLATES_HTML_PREFIX + id);
+    localStorage.removeItem(NAIL_TEMPLATES_TEXTS_PREFIX + id);
+    const inp = document.getElementById('cfgTemplate');
+    if (inp && inp.value === id) inp.value = 'classico';
+    renderTemplatesTab();
+    renderNovaTemplateOptions();
+    mostrarToast('Template "' + nome + '" excluído.');
+  }
+
+  let _templateTextsId = null;
+
+  function escapeHtmlArea(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function extrairCamposTexto(html) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const campos = [];
+    doc.querySelectorAll('[data-text]').forEach(el => {
+      const k = el.getAttribute('data-text');
+      if (!k || campos.some(c => c.chave === k)) return;
+      campos.push({
+        chave: k,
+        label: el.getAttribute('data-label') || k,
+        valor: (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') ? (el.value || '') : (el.innerHTML || '')
+      });
+    });
+    return campos;
+  }
+
+  function abrirEditorTextosTemplate(id) {
+    const t = obterTemplatePorId(id);
+    if (!t) return;
+    obterTemplateHtml(id)
+      .then(html => {
+        const campos = extrairCamposTexto(html);
+        const overrides = obterTextosTemplate(id);
+        const body = document.getElementById('templateTextsBody');
+        const titleEl = document.getElementById('templateTextsTitle');
+        if (titleEl) titleEl.textContent = 'Editar Textos — ' + (t.nome || id);
+
+        if (!campos.length) {
+          body.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6;">Este template ainda não tem textos marcados com <code>data-text</code>. Use <strong>Editar HTML</strong> para adicionar os atributos, conforme o guia "Como um template deve ser criado".</p>';
+        } else {
+          const htmlParts = campos.map((c, i) => {
+            const valor = overrides[c.chave] != null ? overrides[c.chave] : c.valor;
+            return '<div class="template-text-field">' +
+              '<label for="tt_' + i + '">' + escapeHtmlArea(c.label) +
+              ' <code style="font-size:0.72rem; color:var(--text-muted);">data-text="' + escapeHtmlArea(c.chave) + '"</code></label>' +
+              '<textarea id="tt_' + i + '" data-text-key="' + escapeHtmlArea(c.chave) + '" style="width:100%; min-height:64px;">' + escapeHtmlArea(valor) + '</textarea>' +
+              '</div>';
+          });
+          body.innerHTML = htmlParts.join('');
+        }
+        _templateTextsId = id;
+        document.getElementById('templateTextsModal').classList.add('active');
+      })
+      .catch(() => {
+        alert('Não foi possível carregar o HTML do template para editar os textos.');
+      });
+  }
+
+  function fecharTemplateTextsModal(e) {
+    if (e.target === document.getElementById('templateTextsModal')) {
+      document.getElementById('templateTextsModal').classList.remove('active');
+    }
+  }
+
+  function salvarTextosTemplate() {
+    if (!_templateTextsId) return;
+    const textos = {};
+    document.querySelectorAll('#templateTextsBody [data-text-key]').forEach(tx => {
+      textos[tx.getAttribute('data-text-key')] = tx.value;
+    });
+    salvarTextosTemplateStorage(_templateTextsId, textos);
+    const t = obterTemplatePorId(_templateTextsId);
+    document.getElementById('templateTextsModal').classList.remove('active');
+    mostrarToast('Textos do template "' + (t ? t.nome : _templateTextsId) + '" salvos!');
+  }
+
+  let _templateHtmlId = null;
+
+  function abrirEditorHtmlTemplate(id) {
+    const t = obterTemplatePorId(id);
+    if (!t) return;
+    obterTemplateHtml(id)
+      .then(html => {
+        const titleEl = document.getElementById('templateHtmlTitle');
+        if (titleEl) titleEl.textContent = 'Editar HTML — ' + (t.nome || id);
+        const ta = document.getElementById('templateHtmlTextarea');
+        if (ta) ta.value = html;
+        _templateHtmlId = id;
+        document.getElementById('templateHtmlModal').classList.add('active');
+      })
+      .catch(() => {
+        alert('Não foi possível carregar o HTML do template.');
+      });
+  }
+
+  function fecharTemplateHtmlModal(e) {
+    if (e.target === document.getElementById('templateHtmlModal')) {
+      document.getElementById('templateHtmlModal').classList.remove('active');
+    }
+  }
+
+  function salvarHtmlTemplate() {
+    if (!_templateHtmlId) return;
+    const ta = document.getElementById('templateHtmlTextarea');
+    if (!ta || !ta.value.trim()) {
+      alert('O HTML do template está vazio.');
+      return;
+    }
+    try {
+      localStorage.setItem(NAIL_TEMPLATES_HTML_PREFIX + _templateHtmlId, ta.value);
+    } catch (e) {
+      alert('Não foi possível salvar o HTML (armazenamento cheio).');
+      return;
+    }
+    const t = obterTemplatePorId(_templateHtmlId);
+    document.getElementById('templateHtmlModal').classList.remove('active');
+    mostrarToast('HTML do template "' + (t ? t.nome : _templateHtmlId) + '" salvo!');
+  }
+
+  function baixarArquivoTemplate(id) {
+    const t = obterTemplatePorId(id);
+    if (!t) return;
+    obterTemplateHtml(id)
+      .then(html => {
+        html = aplicarTextosNoHtml(html, obterTextosTemplate(id));
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'index.html';
+        link.click();
+      })
+      .catch(() => {
+        alert('Não foi possível carregar o HTML do template.');
+      });
   }
 
   // Inicializa ao carregar com garantia dupla
