@@ -2235,14 +2235,25 @@
 
   /* ─── EXPORTAÇÃO & SALVAMENTO ─── */
   function gerarCodigoConfig() {
-    const config = coletarConfigDoFormulario();
+    let config;
+    try {
+      config = coletarConfigDoFormulario();
+    } catch(e) {
+      console.error('Erro ao coletar config:', e);
+      alert('Erro ao ler os dados do formulário. Verifique se todos os campos estão preenchidos.');
+      return;
+    }
     
-    // Salva no perfil selecionado
+    // Salva no perfil selecionado (com proteção contra QuotaExceededError)
     const currentKey = document.getElementById('profileSelector').value || 'perfil_ativo';
-    const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
-    profiles[currentKey] = config;
-    localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
-    localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(config));
+    try {
+      const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
+      profiles[currentKey] = config;
+      localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+      localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(config));
+    } catch(e) {
+      console.warn('Aviso ao salvar:', e);
+    }
 
     const code = `// ═══════════════════════════════════════════════════════════════════════════════\n` +
                  `// ⚙️ CONFIGURAÇÃO DO SITE — ${(config.dados.nome || 'PERFIL').toUpperCase()}\n` +
@@ -2261,7 +2272,11 @@
   }
 
   function baixarArquivoConfig() {
-    const code = document.getElementById('codeOutputBox').textContent;
+    const code = document.getElementById('codeOutputBox')?.textContent;
+    if (!code) {
+      alert('Nenhum código gerado. Clique primeiro em "📄 Baixar config.js" no painel.');
+      return;
+    }
     const blob = new Blob([code], { type: 'application/javascript;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -2314,8 +2329,19 @@
 
   /* ─── TESTAR SITE LIVE ─── */
   function visualizarSiteLive() {
-    const cfg = coletarConfigDoFormulario();
-    localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(cfg));
+    let cfg;
+    try {
+      cfg = coletarConfigDoFormulario();
+    } catch(e) {
+      console.error('Erro ao coletar config:', e);
+      alert('Erro ao ler os dados do formulário.');
+      return;
+    }
+    try {
+      localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(cfg));
+    } catch(e) {
+      console.warn('Aviso ao salvar preview:', e);
+    }
     const params = `?preview=live&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
     window.open(`index.html${params}`, '_blank');
   }
