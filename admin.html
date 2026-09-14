@@ -905,6 +905,31 @@
       .panel-section { animation: none; }
       #saveToast { transition: none; }
     }
+
+    /* ─── STATUS DE PUBLICAÇÃO SUPABASE ─── */
+    .supabase-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.3rem 0.7rem;
+      white-space: nowrap;
+    }
+    .supabase-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6EE7B7;
+      box-shadow: 0 0 6px rgba(110, 231, 183, 0.5);
+      flex-shrink: 0;
+    }
+    .supabase-status.off .dot { background: #F87171; box-shadow: none; }
+    .supabase-status.busy .dot { background: #FBBF24; box-shadow: none; animation: pulse 1s infinite; }
+    @keyframes pulse { 50% { opacity: 0.35; } }
   </style>
 </head>
 <body>
@@ -931,6 +956,11 @@
       </button>
     </div>
 
+    <!-- Publicação instantânea no Supabase -->
+    <span class="supabase-status" id="supabaseStatus" title="Publicação instantânea no Supabase">
+      <span class="dot"></span><span class="status-text">Supabase</span>
+    </span>
+
     <!-- Botão Salvar Perfil Imediato -->
     <button class="btn-top btn-preview" onclick="salvarPerfilManualComToast()" title="Salva todas as fotos e alterações deste perfil no navegador">
       Salvar Perfil
@@ -955,6 +985,10 @@
 
 <!-- Toast de Confirmação de Salvamento -->
 <div id="saveToast">Perfil e fotos salvos com sucesso!</div>
+
+<!-- Acesso ao Supabase (publicação instantânea). Edite as chaves em assets/supabase-config.js -->
+<script src="assets/supabase-config.js"></script>
+<script src="assets/supabase-admin.js"></script>
 
 <!-- ─── LAYOUT PRINCIPAL ─── -->
 <div class="main-layout">
@@ -1372,21 +1406,18 @@
         <textarea id="sharePitchText" style="width:100%; min-height:110px; font-size:max(0.9rem, 16px); line-height:1.5;"></textarea>
       </div>
 
-      <!-- Seção Publicar no GitHub com 1 Clique -->
+      <!-- Seção Publicação Instantânea (Supabase + Vercel) -->
       <div style="background:var(--card-sub); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1.1rem; margin-top:0.5rem;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.5rem;">
-          <span style="font-size:0.88rem; font-weight:700; color:#FFFFFF;">Publicar / Atualizar no GitHub:</span>
-          <button type="button" class="btn-top btn-preview" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.15); padding:0.35rem 0.8rem; font-size:0.8rem;" onclick="executarDeployAutomaticoBat()">
-            Executar Deploy (Abrir CMD)
+          <span style="font-size:0.88rem; font-weight:700; color:#FFFFFF;">Publicação instantânea (Supabase + Vercel):</span>
+          <button type="button" class="btn-top btn-preview" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.15); padding:0.35rem 0.8rem; font-size:0.8rem;" onclick="publicarPerfilAtualSupabase()">
+            Publicar agora
           </button>
         </div>
-        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.6rem;">
-          Clique em <strong>Executar Deploy</strong> para baixar e rodar o arquivo <code>publicar.bat</code> que sobe este site na hora pelo CMD. Ou copie o comando abaixo:
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.6rem; line-height:1.6;">
+          Este perfil já é publicado no Supabase a cada alteração — o site fica no ar na hora, sem precisar de git. Link publicado:
         </p>
-        <div style="display:flex; gap:0.5rem; align-items:center;">
-          <input type="text" id="gitDeployCmdBox" readonly style="background:#0A0A0A; border:1px solid var(--border); color:#E4E4E7; font-family:monospace; font-size:0.82rem; padding:0.6rem 0.8rem; border-radius:6px; width:100%;" />
-          <button type="button" class="btn-top btn-preview" style="padding:0.6rem 0.9rem; flex-shrink:0;" onclick="copiarComandoGitDeploy()">Copiar</button>
-        </div>
+        <div style="background:#0A0A0A; border:1px solid var(--border); color:#E4E4E7; font-family:monospace; font-size:0.82rem; padding:0.6rem 0.8rem; border-radius:6px; word-break:break-all;" id="sharePublishLink"></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1725,11 +1756,13 @@
   let currentActiveKey = '';
 
   function onProfileChange(key) {
-    // Salva o perfil anterior antes de trocar para o novo
+    // Salva e publica o perfil anterior antes de trocar para o novo
     if (currentActiveKey && currentActiveKey !== key) {
       const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
-      profiles[currentActiveKey] = coletarConfigDoFormulario();
+      const prevCfg = coletarConfigDoFormulario();
+      profiles[currentActiveKey] = prevCfg;
       localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
+      publicarConfigSupabase(currentActiveKey, prevCfg);
     }
 
     const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
@@ -1852,6 +1885,7 @@
     carregarPerfilParaFormulario(novaConfig);
     document.getElementById('novoPerfilModal').classList.remove('active');
     mostrarToast(`Perfil "${nome}" criado com sucesso!`);
+    publicarPerfilAtualSupabase();
   }
 
   function excluirPerfilAtual() {
@@ -2703,7 +2737,7 @@
         localStorage.removeItem('NAIL_LIVE_PREVIEW_CONFIG');
         localStorage.removeItem('NAIL_PREVIEW_TOKEN');
       } catch(_) {}
-      alert('Aviso: as imagens configuradas são muito grandes para o preview do navegador. O site será aberto usando o "config.js" já publicado na pasta da cliente.');
+      alert('Aviso: as imagens configuradas são muito grandes para o preview do navegador. O site será aberto usando o config já publicado no Supabase.');
     }
 
     const currentKey = document.getElementById('profileSelector')?.value || '';
@@ -2713,13 +2747,8 @@
     let siteUrl;
     const template = obterTemplateAtual();
     if (template.id === 'classico') {
-      if (currentKey === 'graziele') {
-        siteUrl = `${baseUrl}index.html?preview=live`;
-      } else if (currentKey) {
-        siteUrl = `${baseUrl}clientes/${currentKey}/index.html?preview=live`;
-      } else {
-        siteUrl = `${baseUrl}index.html?preview=live`;
-      }
+      // Renderizador único cliente.html consome o slug (Supabase) ou preview (localStorage)
+      siteUrl = `${baseUrl}cliente.html?preview=live&slug=${encodeURIComponent(currentKey)}`;
     } else {
       siteUrl = `${baseUrl}templates/${template.id}/index.html?preview=live`;
     }
@@ -2732,24 +2761,12 @@
   function abrirModalCompartilhar() {
     const cfg = coletarConfigDoFormulario();
     const currentKey = document.getElementById('profileSelector').value;
-    
-    let baseUrl = window.location.href.split('admin.html')[0];
-    if (!baseUrl.endsWith('/')) baseUrl += '/';
 
-    let linkFinal = '';
-    // Mapeamento de perfis com páginas dedicadas
-    if (currentKey === 'sara' || currentKey === 'sarah') {
-      linkFinal = `${baseUrl}clientes/sara/`;
-    } else if (currentKey === 'julia' || currentKey === 'julia_albuquerque' || currentKey === 'albuquerq' || currentKey === 'albuquerque') {
-      linkFinal = `${baseUrl}clientes/julia/`;
-    } else if (currentKey === 'graziele') {
-      linkFinal = baseUrl;
-    } else {
-      // Se tiver pasta própria para este perfil
-      linkFinal = `${baseUrl}clientes/${currentKey}/`;
-    }
+    const linkFinal = montarLinkProfissional(currentKey);
 
     document.getElementById('shareUrlDisplay').textContent = linkFinal;
+    const publishLinkEl = document.getElementById('sharePublishLink');
+    if (publishLinkEl) publishLinkEl.textContent = linkFinal;
 
     const pitch = `Oi ${cfg.dados.nome}, tudo bem? Amei muito os seus trabalhos com nail design no seu Instagram!\n\n` +
                   `Criei uma demonstração de um site moderno e exclusivo para o seu ateliê, com agendamento direto no seu WhatsApp:\n${linkFinal}\n\n` +
@@ -2757,10 +2774,8 @@
 
     document.getElementById('sharePitchText').value = pitch;
 
-    // Gera o comando de deploy no CMD já entrando na pasta correta do repositório
-    const gitCmd = `cd /d "C:\\Users\\amd\\.gemini\\antigravity\\scratch\\nail_grazii" && git add . && git commit -m "feat: site da ${cfg.dados.nome}" && git push`;
-    const cmdBox = document.getElementById('gitDeployCmdBox');
-    if (cmdBox) cmdBox.value = gitCmd;
+    // Publica na hora (garante que o site já está no ar no Supabase)
+    publicarPerfilAtualSupabase();
 
     document.getElementById('shareModal').classList.add('active');
   }
@@ -2885,7 +2900,8 @@
     clearTimeout(autosaveTimer);
     autosaveTimer = setTimeout(() => {
       salvarPerfilSilencioso();
-    }, 600);
+      publicarPerfilAtualSupabase();
+    }, 800);
   });
 
   function resetarPainelCompleto() {
@@ -3339,11 +3355,87 @@
       });
   }
 
+  /* ═══════════════════════════════════════════════════ */
+  /* SUPABASE — PUBLICAÇÃO INSTANTÂNEA (VERCEL)          */
+  /* ═══════════════════════════════════════════════════ */
+
+  function obterSlugAtual() {
+    return document.getElementById('profileSelector')?.value || '';
+  }
+
+  // Link público de uma profissional: <site da Vercel>/<slug>
+  function montarLinkProfissional(slug) {
+    const siteUrl = String(window.NAIL_SITE_URL || '').replace(/[:\/]+$/, '');
+    if (siteUrl && slug) return siteUrl + '/' + slug;
+    const currentKey = slug || obterSlugAtual();
+    let baseUrl = window.location.href.split('admin.html')[0];
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+    if (currentKey === 'graziele') return baseUrl;
+    return baseUrl + 'clientes/' + currentKey + '/';
+  }
+
+  function atualizarStatusSupabase(texto, estado) {
+    const el = document.getElementById('supabaseStatus');
+    if (!el) return;
+    el.classList.remove('on', 'off', 'busy');
+    if (estado) el.classList.add(estado);
+    const txt = el.querySelector('.status-text');
+    if (txt) txt.textContent = (texto == null ? '' : texto) || 'Supabase';
+  }
+
+  function inicializarStatusSupabase() {
+    if (window.supabaseConfigurado && supabaseConfigurado()) {
+      atualizarStatusSupabase('', 'on');
+    } else {
+      atualizarStatusSupabase('não configurado', 'off');
+    }
+  }
+
+  // Publica o config de um slug. Junta os textos editados do template
+  // no conteudo para a engine do site aplicar (data-text).
+  function publicarConfigSupabase(slug, cfg) {
+    if (!slug) return Promise.resolve(false);
+    if (!window.supabaseConfigurado || !supabaseConfigurado()) {
+      atualizarStatusSupabase('não configurado', 'off');
+      return Promise.resolve(false);
+    }
+    const textos = obterTextosTemplate(cfg.template || 'classico');
+    cfg.conteudo = Object.assign({}, textos, cfg.conteudo || {});
+    atualizarStatusSupabase('Publicando...', 'busy');
+    return supabaseSalvarPerfil(slug, cfg)
+      .then(() => {
+        const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        atualizarStatusSupabase('Publicado ' + hora, 'on');
+        return true;
+      })
+      .catch((err) => {
+        console.warn('Falha ao publicar no Supabase:', err);
+        atualizarStatusSupabase('offline', 'off');
+        return false;
+      });
+  }
+
+  function publicarPerfilAtualSupabase() {
+    const slug = obterSlugAtual();
+    if (!slug) return Promise.resolve(false);
+    let cfg;
+    try {
+      cfg = coletarConfigDoFormulario();
+    } catch (e) {
+      return Promise.resolve(false);
+    }
+    return publicarConfigSupabase(slug, cfg);
+  }
+
   // Inicializa ao carregar com garantia dupla
-  if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', initProfiles);
-  } else {
+  function bootAdmin() {
     initProfiles();
+    inicializarStatusSupabase();
+  }
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', bootAdmin);
+  } else {
+    bootAdmin();
   }
 </script>
 
