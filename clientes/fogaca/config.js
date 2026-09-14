@@ -20,8 +20,8 @@ const SITE_CONFIG = {
     "destaque": "#e8a9bf",
     "fundo": "#fcfafb",
     "texto": "#211324",
-    "botaoBg": "#211324",
-    "botaoTexto": "#ffffff",
+    "botaoBg": "#d98aa7",
+    "botaoTexto": "#211324",
     "botaoHover": "#74467e",
     "tituloCor": "#211324",
     "tituloDestaque": "#74467e"
