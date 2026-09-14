@@ -6,25 +6,25 @@
   <title>Painel Visual de Controle | Sites para Nail Designers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #120A16;
-      --card-bg: #1C1122;
-      --card-sub: #27192F;
-      --accent: #D98AA7;
-      --accent-purple: #8E6297;
-      --text: #FFFFFF;
-      --text-muted: #BBA8C0;
+      --bg: #0A0A0A;
+      --card-bg: #111111;
+      --card-sub: #1B1B1B;
+      --accent: #FFFFFF;
+      --accent-purple: #FFFFFF;
+      --text: #FAFAFA;
+      --text-muted: #9CA3AF;
       --border: rgba(255, 255, 255, 0.1);
-      --border-focus: #D98AA7;
-      --radius: 14px;
+      --border-focus: #FFFFFF;
+      --radius: 8px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -48,9 +48,9 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
       color: #FFFFFF;
     }
     .header-actions {
@@ -66,9 +66,9 @@
       align-items: center;
       gap: 0.5rem;
       background: var(--card-sub);
-      padding: 0.4rem 0.8rem;
-      border-radius: 50px;
-      border: 1px solid var(--border);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
     .profile-switch-label {
       font-size: 0.76rem;
@@ -86,14 +86,14 @@
       outline: none;
     }
     .profile-select option {
-      background: #1C1122;
+      background: #111111;
       color: #FFFFFF;
     }
 
     .btn-top {
-      padding: 0.65rem 1.3rem;
-      border-radius: 50px;
-      font-size: 0.86rem;
+      padding: 0.6rem 1.15rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       border: none;
@@ -104,19 +104,19 @@
       text-decoration: none;
     }
     .btn-preview {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
       color: #FFFFFF;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.14);
     }
-    .btn-preview:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+    .btn-preview:hover { background: rgba(255, 255, 255, 0.1); }
     .btn-save-main {
-      background: linear-gradient(135deg, #D98AA7 0%, #8E6297 100%);
-      color: #FFFFFF;
-      box-shadow: 0 4px 15px rgba(217, 138, 167, 0.35);
+      background: #FFFFFF;
+      color: #0A0A0A;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
     }
     .btn-save-main:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(217, 138, 167, 0.5);
+      background: #E8E8E8;
+      transform: translateY(-1px);
     }
 
     /* ─── TOAST & SAVE INDICATOR ─── */
@@ -124,11 +124,11 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #180D1D;
-      border: 1px solid var(--accent);
+      background: #101010;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: #FFFFFF;
       padding: 0.85rem 1.4rem;
-      border-radius: 50px;
+      border-radius: 8px;
       font-size: 0.88rem;
       font-weight: 600;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
@@ -165,10 +165,10 @@
       gap: 0.5rem;
     }
     .nav-tab-btn {
-      padding: 1rem 1.2rem;
+      padding: 0.7rem 0.9rem;
       background: transparent;
       border: 1px solid transparent;
-      border-radius: 12px;
+      border-radius: 8px;
       color: var(--text-muted);
       font-size: 0.92rem;
       font-weight: 600;
@@ -184,10 +184,9 @@
       color: #FFFFFF;
     }
     .nav-tab-btn.active {
-      background: var(--card-bg);
-      border-color: var(--border-focus);
+      background: var(--card-sub);
+      border-color: rgba(255, 255, 255, 0.14);
       color: #FFFFFF;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     }
     .nav-tab-icon { font-size: 1.15rem; }
 
@@ -212,8 +211,9 @@
     }
 
     .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
       margin-bottom: 0.4rem;
       color: #FFFFFF;
     }
@@ -250,8 +250,8 @@
     select {
       background: var(--card-sub);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.85rem 1rem;
+      border-radius: 6px;
+      padding: 0.75rem 0.9rem;
       color: #FFFFFF;
       font-family: inherit;
       font-size: 0.95rem;
@@ -262,7 +262,8 @@
     input[type="number"]:focus,
     textarea:focus,
     select:focus {
-      border-color: var(--border-focus);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
     }
     textarea {
       resize: vertical;
@@ -273,8 +274,8 @@
     /* ─── UPLOAD BOX DESIGN ─── */
     .upload-zone {
       background: var(--card-sub);
-      border: 2px dashed rgba(217, 138, 167, 0.35);
-      border-radius: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
       padding: 1.2rem;
       display: flex;
       align-items: center;
@@ -282,16 +283,16 @@
       transition: all 0.2s ease;
     }
     .upload-zone:hover {
-      border-color: var(--accent);
-      background: rgba(217, 138, 167, 0.05);
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.03);
     }
     .avatar-preview-box {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      border: 2px solid var(--accent);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       overflow: hidden;
-      background: #2D1A35;
+      background: #141414;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -309,11 +310,11 @@
       flex-grow: 1;
     }
     .btn-upload-file {
-      background: rgba(217, 138, 167, 0.2);
-      border: 1px solid var(--accent);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       color: #FFFFFF;
       padding: 0.6rem 1.1rem;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
@@ -324,8 +325,8 @@
       transition: all 0.2s ease;
     }
     .btn-upload-file:hover {
-      background: var(--accent);
-      color: #120A16;
+      background: #FFFFFF;
+      color: #0A0A0A;
     }
 
     /* ─── COLOR PICKER STYLING ─── */
@@ -338,7 +339,7 @@
     .color-input-box {
       background: var(--card-sub);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 1rem;
       display: flex;
       align-items: center;
@@ -386,7 +387,7 @@
       background: var(--card-sub);
       border: 1px solid var(--border);
       padding: 0.75rem 1rem;
-      border-radius: 10px;
+      border-radius: 6px;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
@@ -396,9 +397,8 @@
       transition: all 0.2s ease;
     }
     .preset-pill:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      background: #311B3B;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.04);
     }
     .preset-swatches-group {
       display: flex;
@@ -423,7 +423,7 @@
     .dynamic-item-card {
       background: var(--card-sub);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 1.4rem;
       position: relative;
     }
@@ -441,9 +441,9 @@
       color: var(--accent);
     }
     .btn-remove-item {
-      background: rgba(255, 75, 75, 0.15);
-      border: 1px solid rgba(255, 75, 75, 0.3);
-      color: #FF7B7B;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #A1A1AA;
       padding: 0.35rem 0.8rem;
       border-radius: 6px;
       font-size: 0.78rem;
@@ -452,8 +452,8 @@
       transition: all 0.2s ease;
     }
     .btn-remove-item:hover {
-      background: #FF4B4B;
-      color: #FFFFFF;
+      background: #FFFFFF;
+      color: #0A0A0A;
     }
 
     .portfolio-item-grid {
@@ -468,7 +468,7 @@
       border-radius: 10px;
       border: 1px solid var(--border);
       overflow: hidden;
-      background: #120A16;
+      background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -484,7 +484,7 @@
       border: 1px dashed var(--border);
       color: #FFFFFF;
       padding: 1rem;
-      border-radius: 12px;
+      border-radius: 8px;
       width: 100%;
       font-weight: 700;
       font-size: 0.92rem;
@@ -496,9 +496,9 @@
       gap: 0.5rem;
     }
     .btn-add-item:hover {
-      background: rgba(217, 138, 167, 0.1);
-      border-color: var(--accent);
-      color: var(--accent);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #FFFFFF;
     }
 
     .multi-upload-bar {
@@ -507,9 +507,9 @@
       gap: 1rem;
       margin-bottom: 1.5rem;
       padding: 1rem;
-      background: rgba(217, 138, 167, 0.08);
-      border: 1px dashed var(--accent);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
     }
 
     /* ─── CODE OUTPUT MODAL ─── */
@@ -551,13 +551,13 @@
       flex-grow: 1;
     }
     .code-box {
-      background: #0A050D;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: #0A0A0A;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
       padding: 1.2rem;
       font-family: 'Consolas', 'Courier New', monospace;
       font-size: 0.84rem;
-      color: #79FFA8;
+      color: #E4E4E7;
       max-height: 400px;
       overflow: auto;
       white-space: pre-wrap;
@@ -583,14 +583,14 @@
       width: 320px;
       height: 320px;
       border-radius: 50%;
-      border: 3px solid var(--accent);
-      box-shadow: 0 0 0 9999px rgba(10, 5, 13, 0.75), 0 0 25px rgba(217, 138, 167, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75), 0 0 25px rgba(255, 255, 255, 0.08);
       position: relative;
       overflow: hidden;
       cursor: grab;
       touch-action: none;
       user-select: none;
-      background: #180D1D;
+      background: #0F0F0F;
     }
     .cropper-viewport:active {
       cursor: grabbing;
@@ -616,7 +616,7 @@
       width: 100%;
       background: var(--card-sub);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 1.2rem 1.5rem;
       display: flex;
       flex-direction: column;
@@ -664,8 +664,8 @@
 <!-- ─── CABEÇALHO SUPERIOR ─── -->
 <header class="top-header">
   <div class="brand-logo">
-    <span>💅 Painel Nail Designer</span>
-    <button type="button" onclick="resetarPainelCompleto()" style="background:none; border:none; font-size:0.7rem; color:var(--text-muted); cursor:pointer; opacity:0.6;" title="Redefinir painel para o padrão de fábrica se algo travar">🔄 Reset</button>
+    <span>Painel Nail Designer</span>
+    <button type="button" onclick="resetarPainelCompleto()" style="background:none; border:none; font-size:0.7rem; color:var(--text-muted); cursor:pointer; opacity:0.6;" title="Redefinir painel para o padrão de fábrica se algo travar">Reset</button>
   </div>
 
   <div class="header-actions">
@@ -678,63 +678,57 @@
       <button class="btn-top btn-preview" onclick="abrirModalNovoPerfil()" title="Criar Novo Perfil" style="padding: 0.3rem 0.7rem; font-size: 0.78rem;">
         + Novo
       </button>
-      <button class="btn-top btn-preview" onclick="excluirPerfilAtual()" title="Excluir Perfil Atual" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color:#FF7979; border-color:rgba(255,100,100,0.3);">
-        🗑️
+      <button class="btn-top btn-preview" onclick="excluirPerfilAtual()" title="Excluir Perfil Atual" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color:#A1A1AA; border-color:rgba(255,255,255,0.15);">
+        Excluir
       </button>
     </div>
 
     <!-- Botão Salvar Perfil Imediato -->
-    <button class="btn-top btn-preview" onclick="salvarPerfilManualComToast()" style="border-color: #D98AA7; color: #E8A9BF;" title="Salva todas as fotos e alterações deste perfil no navegador">
-      💾 Salvar Perfil
+    <button class="btn-top btn-preview" onclick="salvarPerfilManualComToast()" title="Salva todas as fotos e alterações deste perfil no navegador">
+      Salvar Perfil
     </button>
 
     <!-- Botão Compartilhar / Prospecção -->
-    <button class="btn-top btn-preview" onclick="abrirModalCompartilhar()">
-      📲 Link & Mensagem WhatsApp
+<button class="btn-top btn-preview" onclick="abrirModalCompartilhar()">
+      Link &amp; Mensagem WhatsApp
     </button>
 
     <!-- Botão Visualizar Live -->
     <button class="btn-top btn-preview" onclick="visualizarSiteLive()">
-      👁️ Testar no Site
+      Testar no Site
     </button>
 
     <!-- Botão Salvar e Gerar Código -->
     <button class="btn-top btn-save-main" onclick="gerarCodigoConfig()">
-      📄 Baixar config.js
+      Baixar config.js
     </button>
   </div>
 </header>
 
 <!-- Toast de Confirmação de Salvamento -->
-<div id="saveToast">✨ Perfil e fotos salvos com sucesso!</div>
+<div id="saveToast">Perfil e fotos salvos com sucesso!</div>
 
 <!-- ─── LAYOUT PRINCIPAL ─── -->
 <div class="main-layout">
 
   <!-- Navegação Lateral de Abas -->
   <aside class="side-nav">
-    <button class="nav-tab-btn active" onclick="switchTab('tabDados', this)">
-      <span class="nav-tab-icon">👤</span>
-      <span>Profissional & Foto</span>
+<button class="nav-tab-btn active" onclick="switchTab('tabDados', this)">
+      <span>Profissional &amp; Foto</span>
     </button>
-    <button class="nav-tab-btn" onclick="switchTab('tabCores', this)">
-      <span class="nav-tab-icon">🎨</span>
-      <span>Cores & Tema</span>
+<button class="nav-tab-btn" onclick="switchTab('tabCores', this)">
+      <span>Cores &amp; Tema</span>
     </button>
-    <button class="nav-tab-btn" onclick="switchTab('tabServicos', this)">
-      <span class="nav-tab-icon">💅</span>
-      <span>Serviços & Preços</span>
+<button class="nav-tab-btn" onclick="switchTab('tabServicos', this)">
+      <span>Serviços &amp; Preços</span>
     </button>
-    <button class="nav-tab-btn" onclick="switchTab('tabPortfolio', this)">
-      <span class="nav-tab-icon">📸</span>
-      <span>Portfólio & Fotos</span>
+<button class="nav-tab-btn" onclick="switchTab('tabPortfolio', this)">
+      <span>Portfólio &amp; Fotos</span>
     </button>
     <button class="nav-tab-btn" onclick="switchTab('tabDepoimentos', this)">
-      <span class="nav-tab-icon">💬</span>
       <span>Depoimentos</span>
     </button>
     <button class="nav-tab-btn" onclick="switchTab('tabFaq', this)">
-      <span class="nav-tab-icon">❓</span>
       <span>Dúvidas (FAQ)</span>
     </button>
   </aside>
@@ -774,16 +768,16 @@
           <label>Foto de Perfil da Profissional</label>
           <div class="upload-zone">
             <div class="avatar-preview-box">
-              <img id="avatarPreviewImg" src="assets/images/graziele_perfil.jpg" alt="Foto de Perfil" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23D98AA7\' stroke-width=\'1.5\'><path d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'></path><circle cx=\'12\' cy=\'7\' r=\'4\'></circle></svg>'" />
+              <img id="avatarPreviewImg" src="assets/images/graziele_perfil.jpg" alt="Foto de Perfil" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23FFFFFF\' stroke-width=\'1.5\'><path d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'></path><circle cx=\'12\' cy=\'7\' r=\'4\'></circle></svg>'" />
             </div>
             <div class="upload-zone-controls">
               <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
                 <input type="file" id="fileInputPerfil" accept="image/*" style="display:none;" onchange="handleFotoPerfilUpload(this)" />
                 <button type="button" class="btn-upload-file" onclick="document.getElementById('fileInputPerfil').click()">
-                  📁 Fazer Upload da Foto
+                  Fazer Upload da Foto
                 </button>
-                <button type="button" class="btn-upload-file" style="background:rgba(142,98,151,0.25); border-color:#8E6297;" onclick="abrirModalRecortarFotoAtual()">
-                  ✂️ Ajustar / Reenquadrar
+                <button type="button" class="btn-upload-file" onclick="abrirModalRecortarFotoAtual()">
+                  Ajustar / Reenquadrar
                 </button>
                 <button type="button" class="btn-remove-item" onclick="limparFotoPerfil()">
                   Restaurar Padrão
@@ -914,9 +908,9 @@
 
       <!-- ─── AJUSTES DE INTENSIDADE: BOTÕES E TÍTULOS ─── -->
       <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#FFFFFF; margin-bottom:0.3rem;">
-          🎛️ Intensidade e Estilo dos Botões & Títulos
-        </h3>
+<h3 style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">
+        Intensidade e Estilo dos Botões &amp; Títulos
+      </h3>
         <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:1.4rem;">
           Escolha se deseja botões e títulos com tom mais escuro/marcante, na cor viva da paleta ou suaves.
         </p>
@@ -924,7 +918,7 @@
         <!-- Preview Box em Tempo Real no Painel -->
         <div id="themeLivePreviewBox" style="background:#FCFAFB; border-radius:12px; padding:1.4rem; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
           <div>
-            <div id="previewTitleDisplay" style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:700; color:#211324;">
+            <div id="previewTitleDisplay" style="font-size:1.25rem; font-weight:600; color:#211324;">
               Unhas com <em id="previewTitleEm" style="color:#74467E; font-style:italic;">Acabamento Perfeito</em>
             </div>
             <span style="font-size:0.82rem; color:#5C455F;">Pré-visualização do contraste do seu tema</span>
@@ -940,13 +934,13 @@
             <label>Intensidade do Botão Principal</label>
             <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.6rem;">
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloBotao('escuro')">
-                ⚫ Escuro & Marcante
+                Escuro & Marcante
               </button>
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloBotao('vibrante')">
-                💜 Cor Primária (Vibrante)
+                Cor Primária (Vibrante)
               </button>
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloBotao('suave')">
-                🌸 Tom Secundário
+                Tom Secundário
               </button>
             </div>
             <div class="color-input-box" style="margin-top:0.2rem;">
@@ -963,10 +957,10 @@
             <label>Cor da Letra do Botão</label>
             <div style="display:flex; gap:0.4rem; margin-bottom:0.6rem;">
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="document.getElementById('corBotaoTexto').value='#FFFFFF'; atualizarEstilosDinamicos(); atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');">
-                ⚪ Branco
+                Branco
               </button>
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="document.getElementById('corBotaoTexto').value='#211324'; atualizarEstilosDinamicos(); atualizarHexDisplay('corBotaoTexto', 'hexBotaoTexto');">
-                ⚫ Escuro
+                Escuro
               </button>
             </div>
             <div class="color-input-box" style="margin-top:0.2rem;">
@@ -983,10 +977,10 @@
             <label>Intensidade da Cor dos Títulos</label>
             <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.6rem;">
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloTitulo('grafite')">
-                🖤 Grafite Editorial
+                Grafite Editorial
               </button>
               <button type="button" class="btn-top btn-preview" style="font-size:0.75rem; padding:0.35rem 0.7rem;" onclick="ajustarEstiloTitulo('paleta')">
-                🎨 Cor da Marca / Paleta
+                Cor da Marca / Paleta
               </button>
             </div>
             <div class="color-input-box" style="margin-top:0.2rem;">
@@ -1019,7 +1013,7 @@
       <p class="section-subtitle">Adicione, edite ou remova procedimentos e valores com facilidade.</p>
 
       <div class="items-stack" id="servicosContainer"></div>
-      <button class="btn-add-item" onclick="adicionarServicoItem()">➕ Adicionar Novo Serviço</button>
+      <button class="btn-add-item" onclick="adicionarServicoItem()">Adicionar Novo Serviço</button>
     </div>
 
     <!-- ── TAB 4: PORTFÓLIO ── -->
@@ -1031,7 +1025,7 @@
       <div class="multi-upload-bar">
         <input type="file" id="fileInputMultiPortfolio" accept="image/*" multiple style="display:none;" onchange="handleMultiPortfolioUpload(this)" />
         <button type="button" class="btn-upload-file" onclick="document.getElementById('fileInputMultiPortfolio').click()">
-          📁 Subir Várias Fotos de Uma Vez
+          Subir Várias Fotos de Uma Vez
         </button>
         <span style="font-size:0.84rem; color:var(--text-muted);">
           Selecione várias fotos no seu computador/celular para criar os cards automaticamente!
@@ -1039,7 +1033,7 @@
       </div>
 
       <div class="items-stack" id="portfolioContainer"></div>
-      <button class="btn-add-item" onclick="adicionarPortfolioItem()">➕ Adicionar Card de Foto Manual</button>
+      <button class="btn-add-item" onclick="adicionarPortfolioItem()">Adicionar Card de Foto Manual</button>
     </div>
 
     <!-- ── TAB 5: DEPOIMENTOS ── -->
@@ -1048,7 +1042,7 @@
       <p class="section-subtitle">Opiniões de clientes satisfeitas para gerar prova social.</p>
 
       <div class="items-stack" id="depoimentosContainer"></div>
-      <button class="btn-add-item" onclick="adicionarDepoimentoItem()">➕ Adicionar Novo Depoimento</button>
+      <button class="btn-add-item" onclick="adicionarDepoimentoItem()">Adicionar Novo Depoimento</button>
     </div>
 
     <!-- ── TAB 6: FAQ ── -->
@@ -1057,7 +1051,7 @@
       <p class="section-subtitle">Tire as principais dúvidas de novas clientes automaticamente.</p>
 
       <div class="items-stack" id="faqContainer"></div>
-      <button class="btn-add-item" onclick="adicionarFaqItem()">➕ Adicionar Nova Pergunta</button>
+      <button class="btn-add-item" onclick="adicionarFaqItem()">Adicionar Nova Pergunta</button>
     </div>
 
   </main>
@@ -1067,7 +1061,7 @@
 <div class="modal-backdrop" id="codeModal" onclick="closeCodeModal(event)">
   <div class="modal-container">
     <div class="modal-header">
-      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">Arquivo config.js Pronto!</h3>
+      <h3 style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Arquivo config.js Pronto!</h3>
       <button class="btn-remove-item" onclick="document.getElementById('codeModal').classList.remove('active')">✕ Fechar</button>
     </div>
     <div class="modal-body">
@@ -1077,9 +1071,9 @@
       <pre class="code-box" id="codeOutputBox"></pre>
     </div>
     <div class="modal-footer" style="flex-wrap:wrap; gap:0.5rem;">
-      <button class="btn-top btn-preview" onclick="copiarCodigoOutput()">📋 Copiar Código</button>
-      <button class="btn-top btn-save-main" onclick="baixarArquivoConfig()">📥 Baixar config.js</button>
-      <button class="btn-top btn-preview" style="border-color:#8E6297; color:#E8A9BF;" onclick="baixarIndexHtmlPronto()">🌐 Baixar index.html</button>
+      <button class="btn-top btn-preview" onclick="copiarCodigoOutput()">Copiar Código</button>
+      <button class="btn-top btn-save-main" onclick="baixarArquivoConfig()">Baixar config.js</button>
+      <button class="btn-top btn-preview" onclick="baixarIndexHtmlPronto()">Baixar index.html</button>
     </div>
   </div>
 </div>
@@ -1088,41 +1082,41 @@
 <div class="modal-backdrop" id="shareModal" onclick="closeShareModal(event)">
   <div class="modal-container" style="max-width: 650px;">
     <div class="modal-header">
-      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">📲 Enviar Demonstração / WhatsApp</h3>
+      <h3 style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Enviar Demonstração / WhatsApp</h3>
       <button class="btn-remove-item" onclick="document.getElementById('shareModal').classList.remove('active')">✕ Fechar</button>
     </div>
     <div class="modal-body">
       <div style="margin-bottom: 1.2rem;">
-        <label style="color:#E8A9BF; margin-bottom:0.4rem; display:block;">🔗 Link do Site da Profissional:</label>
-        <div style="background:#0A050D; border:1px solid var(--border); padding:0.8rem 1rem; border-radius:10px; color:#79FFA8; font-family:monospace; font-size:0.88rem; word-break:break-all;" id="shareUrlDisplay"></div>
-        <button type="button" class="btn-top btn-preview" style="margin-top:0.6rem; width:100%;" onclick="copiarShareLink()">📋 Copiar Link</button>
+        <label style="color:#FFFFFF; margin-bottom:0.4rem; display:block;">Link do Site da Profissional:</label>
+        <div style="background:#0A0A0A; border:1px solid var(--border); padding:0.8rem 1rem; border-radius:6px; color:#E4E4E7; font-family:monospace; font-size:0.88rem; word-break:break-all;" id="shareUrlDisplay"></div>
+        <button type="button" class="btn-top btn-preview" style="margin-top:0.6rem; width:100%;" onclick="copiarShareLink()">Copiar Link</button>
       </div>
 
       <div style="margin-bottom: 1.2rem;">
-        <label style="color:#E8A9BF; margin-bottom:0.4rem; display:block;">💬 Mensagem Pronta de Abordagem:</label>
+        <label style="color:#FFFFFF; margin-bottom:0.4rem; display:block;">Mensagem Pronta de Abordagem:</label>
         <textarea id="sharePitchText" style="width:100%; min-height:110px; font-size:0.9rem; line-height:1.5;"></textarea>
       </div>
 
       <!-- Seção Publicar no GitHub com 1 Clique -->
-      <div style="background:var(--card-sub); border:1px solid rgba(217,138,167,0.3); border-radius:12px; padding:1.1rem; margin-top:0.5rem;">
+      <div style="background:var(--card-sub); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1.1rem; margin-top:0.5rem;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.5rem;">
-          <span style="font-size:0.88rem; font-weight:700; color:#FFFFFF;">🚀 Publicar / Atualizar no GitHub:</span>
-          <button type="button" class="btn-top btn-preview" style="background:#25132B; border-color:#D98AA7; padding:0.35rem 0.8rem; font-size:0.8rem;" onclick="executarDeployAutomaticoBat()">
-            ⚡ Executar Deploy (Abrir CMD)
+          <span style="font-size:0.88rem; font-weight:700; color:#FFFFFF;">Publicar / Atualizar no GitHub:</span>
+          <button type="button" class="btn-top btn-preview" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.15); padding:0.35rem 0.8rem; font-size:0.8rem;" onclick="executarDeployAutomaticoBat()">
+            Executar Deploy (Abrir CMD)
           </button>
         </div>
         <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.6rem;">
           Clique em <strong>Executar Deploy</strong> para baixar e rodar o arquivo <code>publicar.bat</code> que sobe este site na hora pelo CMD. Ou copie o comando abaixo:
         </p>
         <div style="display:flex; gap:0.5rem; align-items:center;">
-          <input type="text" id="gitDeployCmdBox" readonly style="background:#0A050D; border:1px solid var(--border); color:#79FFA8; font-family:monospace; font-size:0.82rem; padding:0.6rem 0.8rem; border-radius:8px; width:100%;" />
-          <button type="button" class="btn-top btn-preview" style="padding:0.6rem 0.9rem; flex-shrink:0;" onclick="copiarComandoGitDeploy()">📋 Copiar</button>
+          <input type="text" id="gitDeployCmdBox" readonly style="background:#0A0A0A; border:1px solid var(--border); color:#E4E4E7; font-family:monospace; font-size:0.82rem; padding:0.6rem 0.8rem; border-radius:6px; width:100%;" />
+          <button type="button" class="btn-top btn-preview" style="padding:0.6rem 0.9rem; flex-shrink:0;" onclick="copiarComandoGitDeploy()">Copiar</button>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-top btn-preview" onclick="copiarSharePitch()">📋 Copiar Mensagem</button>
-      <button class="btn-top btn-save-main" style="background:#25D366; border:none;" onclick="enviarViaWhatsAppWeb()">🚀 Abrir no WhatsApp</button>
+      <button class="btn-top btn-preview" onclick="copiarSharePitch()">Copiar Mensagem</button>
+      <button class="btn-top btn-save-main" style="background:#FFFFFF; border:none; color:#0A0A0A;" onclick="enviarViaWhatsAppWeb()">Abrir no WhatsApp</button>
     </div>
   </div>
 </div>
@@ -1130,28 +1124,28 @@
 <div class="modal-backdrop" id="novoPerfilModal" onclick="fecharModalNovoPerfil(event)">
   <div class="modal-container" style="max-width: 500px;">
     <div class="modal-header">
-      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">✨ Criar Novo Perfil</h3>
+      <h3 style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Criar Novo Perfil</h3>
       <button class="btn-remove-item" onclick="document.getElementById('novoPerfilModal').classList.remove('active')">✕ Fechar</button>
     </div>
     <div class="modal-body">
       <div style="margin-bottom: 1.2rem;">
-        <label style="color:#E8A9BF; margin-bottom:0.4rem; display:block; font-size:0.88rem; font-weight:700;">Nome da Profissional ou Ateliê:</label>
+        <label style="color:#FFFFFF; margin-bottom:0.4rem; display:block; font-size:0.88rem; font-weight:700;">Nome da Profissional ou Ateliê:</label>
         <input type="text" id="novoPerfilNomeInput" placeholder="Ex: Camila Silva, Studio Amanda, Débora Nails..." style="width:100%; font-size:1rem; padding:0.8rem 1rem;" onkeydown="if(event.key==='Enter') confirmarCriarNovoPerfil()" />
       </div>
 
       <div style="margin-bottom: 1rem;">
         <label style="color:var(--text-muted); margin-bottom:0.4rem; display:block; font-size:0.84rem;">Iniciar com qual modelo?</label>
         <select id="novoPerfilModeloBase" style="width:100%; background:var(--card-sub); border:1px solid var(--border); color:#FFFFFF; padding:0.7rem 1rem; border-radius:10px; outline:none;">
-          <option value="graziele">💎 Modelo Completo — Graziele Nail Designer</option>
-          <option value="sara">🌸 Modelo Completo — Sarah Smooth Art Nails</option>
-          <option value="atual">📋 Copiar dados da tela atual</option>
-          <option value="limpo">✨ Perfil em Branco / Limpo</option>
+          <option value="graziele">Modelo Completo — Graziele Nail Designer</option>
+          <option value="sara">Modelo Completo — Sarah Smooth Art Nails</option>
+          <option value="atual">Copiar dados da tela atual</option>
+          <option value="limpo">Perfil em Branco / Limpo</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-top btn-preview" onclick="document.getElementById('novoPerfilModal').classList.remove('active')">Cancelar</button>
-      <button class="btn-top btn-save-main" onclick="confirmarCriarNovoPerfil()">Criar Perfil ✨</button>
+      <button class="btn-top btn-save-main" onclick="confirmarCriarNovoPerfil()">Criar Perfil</button>
     </div>
   </div>
 </div>
@@ -1160,7 +1154,7 @@
 <div class="modal-backdrop" id="modalCropFoto" onclick="fecharModalCrop(event)">
   <div class="modal-container" style="max-width: 540px;">
     <div class="modal-header">
-      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#FFFFFF;">✂️ Ajustar / Reenquadrar Foto de Perfil</h3>
+      <h3 style="font-size:1.25rem; font-weight:600; color:#FFFFFF;">Ajustar / Reenquadrar Foto de Perfil</h3>
       <button class="btn-remove-item" onclick="document.getElementById('modalCropFoto').classList.remove('active')">✕ Fechar</button>
     </div>
     <div class="modal-body" style="display:flex; flex-direction:column; align-items:center; gap:1.2rem;">
@@ -1178,34 +1172,34 @@
       <!-- Controles de Ajuste -->
       <div class="cropper-controls-panel">
         <div class="cropper-control-row">
-          <span class="cropper-control-label">🔍 Zoom:</span>
+          <span class="cropper-control-label">Zoom:</span>
           <input type="range" id="cropZoomRange" class="cropper-range" min="0.5" max="3.0" step="0.02" value="1.0" oninput="onCropZoomChange(this.value)" />
-          <span id="cropZoomVal" style="font-size:0.8rem; color:#E8A9BF; min-width:40px; text-align:right;">100%</span>
+          <span id="cropZoomVal" style="font-size:0.8rem; color:#FFFFFF; min-width:40px; text-align:right;">100%</span>
         </div>
 
         <div class="cropper-btns-row">
           <button type="button" class="btn-top btn-preview" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="rotacionarFotoCrop(-90)">
-            🔄 Girar -90°
+            Girar -90°
           </button>
           <button type="button" class="btn-top btn-preview" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="rotacionarFotoCrop(90)">
-            🔄 Girar +90°
+            Girar +90°
           </button>
           <button type="button" class="btn-top btn-preview" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="resetarCropAjustes()">
-            ↺ Centralizar
+            Centralizar
           </button>
         </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-top btn-preview" onclick="document.getElementById('modalCropFoto').classList.remove('active')">Cancelar</button>
-      <button class="btn-top btn-save-main" onclick="aplicarRecorteFotoPerfil()">💾 Aplicar e Salvar Foto</button>
+      <button class="btn-top btn-save-main" onclick="aplicarRecorteFotoPerfil()">Aplicar e Salvar Foto</button>
     </div>
   </div>
 </div>
 
 <script>
   /* ═══════════════════════════════════════════════════════════════════ */
-  /* ⚙️ LÓGICA DO PAINEL ADMINISTRATIVO COM SUPORTE A UPLOAD E MULTI-PERFIS */
+  /* LÓGICA DO PAINEL ADMINISTRATIVO COM SUPORTE A UPLOAD E MULTI-PERFIS */
   /* ═══════════════════════════════════════════════════════════════════ */
 
   // Perfis padrão iniciais
@@ -1505,7 +1499,7 @@
     
     carregarPerfilParaFormulario(novaConfig);
     document.getElementById('novoPerfilModal').classList.remove('active');
-    mostrarToast(`✨ Perfil "${nome}" criado com sucesso!`);
+    mostrarToast(`Perfil "${nome}" criado com sucesso!`);
   }
 
   function excluirPerfilAtual() {
@@ -1532,7 +1526,7 @@
       renderProfileSelectOptions();
       if (sel) sel.value = nextKey;
       carregarPerfilParaFormulario(profiles[nextKey]);
-      mostrarToast(`🗑️ Perfil "${nome}" foi excluído.`);
+      mostrarToast(`Perfil "${nome}" foi excluído.`);
     }
   }
 
@@ -1901,7 +1895,7 @@
     salvarPerfilSilencioso();
 
     document.getElementById('modalCropFoto').classList.remove('active');
-    mostrarToast('✨ Foto de perfil ajustada e salva com sucesso!');
+    mostrarToast('Foto de perfil ajustada e salva com sucesso!');
   }
 
   /* ─── UPLOAD DE FOTOS (BASE64 DATA URLS OTIMIZADAS) ─── */
@@ -1936,13 +1930,13 @@
       card.querySelector('.p-img').value = base64;
       card.querySelector('.portfolio-thumb-img').src = base64;
       salvarPerfilSilencioso();
-      mostrarToast('📸 Foto do portfólio salva!');
+      mostrarToast('Foto do portfólio salva!');
     }
   }
 
   async function handleMultiPortfolioUpload(input) {
     if (input.files && input.files.length > 0) {
-      mostrarToast('⏳ Otimizando fotos...');
+      mostrarToast('Otimizando fotos...');
       const files = Array.from(input.files);
       for (const file of files) {
         const base64 = await comprimirImagemParaWeb(file, 1000, 0.82);
@@ -1955,7 +1949,7 @@
         document.getElementById('portfolioContainer').appendChild(newCard);
       }
       salvarPerfilSilencioso();
-      mostrarToast(`✨ ${files.length} foto(s) adicionada(s) e salvas com sucesso!`);
+      mostrarToast(`${files.length} foto(s) adicionada(s) e salvas com sucesso!`);
       input.value = ''; // reseta
     }
   }
@@ -1971,7 +1965,7 @@
     div.className = 'dynamic-item-card';
     div.innerHTML = `
       <div class="item-card-head">
-        <span class="item-card-title">💅 Serviço #${i + 1}</span>
+        <span class="item-card-title">Serviço #${i + 1}</span>
         <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
       </div>
       <div class="form-grid">
@@ -2024,7 +2018,7 @@
     div.className = 'dynamic-item-card';
     div.innerHTML = `
       <div class="item-card-head">
-        <span class="item-card-title">📸 Foto #${i + 1}</span>
+        <span class="item-card-title">Foto #${i + 1}</span>
         <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
       </div>
       <div class="portfolio-item-grid">
@@ -2037,7 +2031,7 @@
             <div style="display:flex; gap:0.5rem; align-items:center;">
               <input type="file" accept="image/*" style="display:none;" onchange="handleCardImageUpload(this)" />
               <button type="button" class="btn-upload-file" onclick="this.previousElementSibling.click()">
-                📁 Escolher Foto
+                Escolher Foto
               </button>
               <input type="text" class="p-img" value="${p.imagem || ''}" placeholder="Caminho ou Base64" oninput="this.closest('.dynamic-item-card').querySelector('.portfolio-thumb-img').src=this.value" style="flex-grow:1;" />
             </div>
@@ -2072,7 +2066,7 @@
     div.className = 'dynamic-item-card';
     div.innerHTML = `
       <div class="item-card-head">
-        <span class="item-card-title">💬 Avaliação #${i + 1}</span>
+        <span class="item-card-title">Avaliação #${i + 1}</span>
         <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
       </div>
       <div class="form-grid">
@@ -2109,7 +2103,7 @@
     div.className = 'dynamic-item-card';
     div.innerHTML = `
       <div class="item-card-head">
-        <span class="item-card-title">❓ Pergunta #${i + 1}</span>
+        <span class="item-card-title">Pergunta #${i + 1}</span>
         <button type="button" class="btn-remove-item" onclick="this.closest('.dynamic-item-card').remove()">Remover</button>
       </div>
       <div class="form-grid">
@@ -2263,7 +2257,7 @@
     }
 
     const code = `// ═══════════════════════════════════════════════════════════════════════════════\n` +
-                 `// ⚙️ CONFIGURAÇÃO DO SITE — ${(config.dados.nome || 'PERFIL').toUpperCase()}\n` +
+                 `// CONFIGURAÇÃO DO SITE — ${(config.dados.nome || 'PERFIL').toUpperCase()}\n` +
                  `// ═══════════════════════════════════════════════════════════════════════════════\n\n` +
                  `const SITE_CONFIG = ${JSON.stringify(config, null, 2)};\n`;
 
@@ -2281,7 +2275,7 @@
   function baixarArquivoConfig() {
     const code = document.getElementById('codeOutputBox')?.textContent;
     if (!code) {
-      alert('Nenhum código gerado. Clique primeiro em "📄 Baixar config.js" no painel.');
+      alert('Nenhum código gerado. Clique primeiro em "Baixar config.js" no painel.');
       return;
     }
     const blob = new Blob([code], { type: 'application/javascript;charset=utf-8;' });
@@ -2311,9 +2305,9 @@
       .then(res => res.text())
       .then(html => {
         // Substitui o título e meta tags no head
-        let customHtml = html.replace(/<title>.*?<\/title>/i, `<title>${nome} — ${subtitulo} 💅 | Unhas em Gel e Fibra</title>`);
+        let customHtml = html.replace(/<title>.*?<\/title>/i, `<title>${nome} — ${subtitulo} | Unhas em Gel e Fibra</title>`);
         customHtml = customHtml.replace(/<meta name="description".*?>/i, `<meta name="description" content="Unhas perfeitas com o cuidado que você merece. Alongamento em fibra, gel e decorações exclusivas por ${nome}." />`);
-        customHtml = customHtml.replace(/<meta property="og:title".*?>/i, `<meta property="og:title" content="${nome} — ${subtitulo} 💅" />`);
+        customHtml = customHtml.replace(/<meta property="og:title".*?>/i, `<meta property="og:title" content="${nome} — ${subtitulo}" />`);
         customHtml = customHtml.replace(/<meta property="og:description".*?>/i, `<meta property="og:description" content="Unhas lindas, fortes e naturais. Agende seu horário online no WhatsApp!" />`);
         customHtml = customHtml.replace(/<meta property="og:image".*?>/i, `<meta property="og:image" content="${ogImageUrl}" />`);
         
@@ -2401,9 +2395,9 @@
 
     document.getElementById('shareUrlDisplay').textContent = linkFinal;
 
-    const pitch = `Oi ${cfg.dados.nome}, tudo bem? Amei muito os seus trabalhos com nail design no seu Instagram! 😍\n\n` +
-                  `Criei uma demonstração de um site moderno e exclusivo para o seu ateliê, com agendamento direto no seu WhatsApp:\n👉 ${linkFinal}\n\n` +
-                  `O que você achou? Ficou lindo com o seu nome! 💕`;
+    const pitch = `Oi ${cfg.dados.nome}, tudo bem? Amei muito os seus trabalhos com nail design no seu Instagram!\n\n` +
+                  `Criei uma demonstração de um site moderno e exclusivo para o seu ateliê, com agendamento direto no seu WhatsApp:\n${linkFinal}\n\n` +
+                  `O que você achou? Ficou lindo com o seu nome!`;
 
     document.getElementById('sharePitchText').value = pitch;
 
@@ -2434,7 +2428,7 @@
       `color 0D\r\n` +
       `cd /d "C:\\Users\\amd\\.gemini\\antigravity\\scratch\\nail_grazii"\r\n` +
       `echo =====================================================================\r\n` +
-      `echo 🚀 SUBINDO SITE DA ${nome.toUpperCase()} PARA O GITHUB PAGES...\r\n` +
+      `echo SUBINDO SITE DA ${nome.toUpperCase()} PARA O GITHUB PAGES...\r\n` +
       `echo =====================================================================\r\n` +
       `echo.\r\n` +
       `echo [1/3] Adicionando arquivos...\r\n` +
@@ -2447,7 +2441,7 @@
       `git push\r\n` +
       `echo.\r\n` +
       `echo =====================================================================\r\n` +
-      `echo ✨ PRONTO! O site da ${nome} ja esta publicado na internet!\r\n` +
+      `echo PRONTO! O site da ${nome} ja esta publicado na internet!\r\n` +
       `echo =====================================================================\r\n` +
       `echo.\r\n` +
       `pause\r\n`;
@@ -2503,7 +2497,7 @@
     } catch (e) {
       console.warn('Aviso de armazenamento:', e);
       if (e.name === 'QuotaExceededError' || e.code === 22) {
-        mostrarToast('⚠️ Atenção: Armazenamento cheio. Exporte seu config.js!');
+        mostrarToast('Atenção: Armazenamento cheio. Exporte seu config.js!');
       }
     }
   }
@@ -2511,7 +2505,7 @@
   function mostrarToast(msg) {
     const toast = document.getElementById('saveToast');
     if (!toast) return;
-    toast.textContent = msg || '✨ Alterações e fotos salvas com sucesso!';
+    toast.textContent = msg || 'Alterações e fotos salvas com sucesso!';
     toast.classList.add('show');
     clearTimeout(window._toastTimeout);
     window._toastTimeout = setTimeout(() => {
@@ -2522,7 +2516,7 @@
   function salvarPerfilManualComToast() {
     salvarPerfilSilencioso();
     const nome = document.getElementById('cfgNome')?.value || 'Perfil';
-    mostrarToast(`💾 Perfil "${nome}" e todas as fotos foram salvos!`);
+    mostrarToast(`Perfil "${nome}" e todas as fotos foram salvos!`);
   }
 
   // Autosave com debounce a cada alteração em campos de texto, cores e selects
