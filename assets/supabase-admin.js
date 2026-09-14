@@ -22,14 +22,20 @@
     if (!c) return Promise.reject(new Error('Supabase não configurado'));
     const method = (options && options.method) || 'GET';
     const body = (options && options.body) || undefined;
+    const headers = {
+      'apikey': c.anon,
+      'Authorization': 'Bearer ' + c.anon,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+    if (options && options.headers) {
+      Object.keys(options.headers).forEach(function (k) {
+        headers[k] = options.headers[k];
+      });
+    }
     return fetch(c.url.replace(/\/$/, '') + path, {
       method: method,
-      headers: {
-        'apikey': c.anon,
-        'Authorization': 'Bearer ' + c.anon,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
+      headers: headers,
       body: body
     });
   };
