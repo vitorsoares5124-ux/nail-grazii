@@ -2246,13 +2246,20 @@
     
     // Salva no perfil selecionado (com proteção contra QuotaExceededError)
     const currentKey = document.getElementById('profileSelector').value || 'perfil_ativo';
+    let saveOk = false;
     try {
       const profiles = JSON.parse(localStorage.getItem('NAIL_SAVED_PROFILES') || '{}');
       profiles[currentKey] = config;
       localStorage.setItem('NAIL_SAVED_PROFILES', JSON.stringify(profiles));
       localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(config));
+      localStorage.setItem('NAIL_PREVIEW_TOKEN', 'pv' + Date.now().toString(36));
+      saveOk = true;
     } catch(e) {
+      saveOk = false;
       console.warn('Aviso ao salvar:', e);
+    }
+    if (!saveOk) {
+      alert('Aviso: as fotos deste perfil são muito grandes e não couberam no armazenamento do navegador. O código foi gerado normalmente — para usar no site, publique o "config.js" na pasta da cliente.');
     }
 
     const code = `// ═══════════════════════════════════════════════════════════════════════════════\n` +
@@ -2337,10 +2344,21 @@
       alert('Erro ao ler os dados do formulário.');
       return;
     }
+    // Salva a config do preview com um TOKEN único. Se o armazenamento estiver
+    // cheio (localStorage ~5MB com imagens grandes), limpa as chaves de preview
+    // e segue o fluxo: o site aberto usará o config.js já publicado, sem quebrar.
+    let previewToken = '';
     try {
       localStorage.setItem('NAIL_LIVE_PREVIEW_CONFIG', JSON.stringify(cfg));
+      previewToken = 'pv' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      localStorage.setItem('NAIL_PREVIEW_TOKEN', previewToken);
     } catch(e) {
-      console.warn('Aviso ao salvar preview:', e);
+      console.warn('Aviso ao salvar preview (usando config.js do site):', e);
+      try {
+        localStorage.removeItem('NAIL_LIVE_PREVIEW_CONFIG');
+        localStorage.removeItem('NAIL_PREVIEW_TOKEN');
+      } catch(_) {}
+      alert('Aviso: as imagens configuradas são muito grandes para o preview do navegador. O site será aberto usando o "config.js" já publicado na pasta da cliente.');
     }
 
     const currentKey = document.getElementById('profileSelector')?.value || '';
@@ -2356,7 +2374,7 @@
       siteUrl = `${baseUrl}index.html?preview=live`;
     }
 
-    const params = `&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
+    const params = `&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}&pv=${previewToken}`;
     window.open(siteUrl + params, '_blank');
   }
 

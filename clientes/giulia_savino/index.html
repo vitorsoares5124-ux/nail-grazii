@@ -2187,11 +2187,16 @@
     let cfg = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {};
     
     // Se estiver em modo de teste vindo do painel admin.html
-    if (urlParams.get('preview') === 'live') {
+    // Só usa o preview do localStorage caso o token (pv) bata com o último
+    // gerado pelo admin. Assim, config velha/estourada de cota não quebra o site.
+    if (urlParams.get('preview') === 'live' && urlParams.get('pv')) {
       try {
-        const liveCfg = localStorage.getItem('NAIL_LIVE_PREVIEW_CONFIG');
-        if (liveCfg) {
-          cfg = JSON.parse(liveCfg);
+        const expected = localStorage.getItem('NAIL_PREVIEW_TOKEN');
+        if (expected && expected === urlParams.get('pv')) {
+          const liveCfg = localStorage.getItem('NAIL_LIVE_PREVIEW_CONFIG');
+          if (liveCfg) {
+            cfg = JSON.parse(liveCfg);
+          }
         }
       } catch (e) {
         console.warn('Preview fallback:', e);
