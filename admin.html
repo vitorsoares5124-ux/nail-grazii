@@ -2294,7 +2294,7 @@
     if (!baseUrl.endsWith('/')) baseUrl += '/';
     
     // URL da foto de capa (og:image)
-    let ogImageUrl = `${baseUrl}clientes/${currentKey}/assets/images/perfil.jpg`;
+    let ogImageUrl = `${baseUrl}clientes/${currentKey}/perfil.jpg`;
     if (currentKey === 'graziele') {
       ogImageUrl = `${baseUrl}assets/images/graziele_perfil.jpg`;
     }
@@ -2342,8 +2342,22 @@
     } catch(e) {
       console.warn('Aviso ao salvar preview:', e);
     }
-    const params = `?preview=live&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
-    window.open(`index.html${params}`, '_blank');
+
+    const currentKey = document.getElementById('profileSelector')?.value || '';
+    let baseUrl = window.location.href.split('admin.html')[0];
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+    let siteUrl;
+    if (currentKey === 'graziele') {
+      siteUrl = `${baseUrl}index.html?preview=live`;
+    } else if (currentKey) {
+      siteUrl = `${baseUrl}clientes/${currentKey}/index.html?preview=live`;
+    } else {
+      siteUrl = `${baseUrl}index.html?preview=live`;
+    }
+
+    const params = `&nome=${encodeURIComponent(cfg.dados.nome)}&subtitulo=${encodeURIComponent(cfg.dados.subtitulo)}&whats=${encodeURIComponent(cfg.dados.whatsapp)}&insta=${encodeURIComponent(cfg.dados.instagram)}`;
+    window.open(siteUrl + params, '_blank');
   }
 
   /* ─── MODAL DE COMPARTILHAR / PROSPECÇÃO ─── */
