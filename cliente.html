@@ -1279,8 +1279,9 @@
       .modal-head { padding: 1.2rem 1rem 0.8rem; }
     }
   </style>
+<style>body.nail-wait{visibility:hidden}</style>
 </head>
-<body>
+<body><script>document.body.classList.add("nail-wait")</script>
 
 <!-- ─── HEADER ─── -->
 <header>
@@ -2474,6 +2475,8 @@
   }
 
   /* ─── INICIALIZAÇÃO: SITE VIA SUPABASE (VERCEL) OU CLÁSSICO ─── */
+  function nailReveal() { if (document.body) document.body.classList.remove('nail-wait'); }
+  setTimeout(nailReveal, 5000); // segurança: nunca deixa a página presa invisível
   (function nailBoot() {
     var params = new URLSearchParams(window.location.search);
     var isPreview = params.get('preview') === 'live' && params.get('pv');
@@ -2484,22 +2487,25 @@
     var slug = params.get('slug') || lastSeg || '';
 
     // 1) Preview ao vivo vindo do painel admin (usa o localStorage atual)
-    if (isPreview) { initDynamicProfile(); return; }
+    if (isPreview) { initDynamicProfile(); nailReveal(); return; }
 
     // 2) Cliente publicado no Supabase (a Vercel serviu /<slug>)
     if (slug && window.carregarPerfilSupabase) {
       window.carregarPerfilSupabase(slug).then(function (cfg) {
         window.NAIL_SLUG_CONFIG = cfg || undefined;
         initDynamicProfile();
+        nailReveal();
       }).catch(function () {
         window.NAIL_SLUG_CONFIG = undefined;
         initDynamicProfile();
+        nailReveal();
       });
       return;
     }
 
     // 3) Sem slug: comportamento clássico (config.js local / dados padrão)
     initDynamicProfile();
+    nailReveal();
   })();
 
   /* ── ENVIO WHATSAPP COM NÚMERO DINÂMICO ── */
