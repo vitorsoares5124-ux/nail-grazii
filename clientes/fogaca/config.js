@@ -5,7 +5,7 @@
 const SITE_CONFIG = {
   "dados": {
     "nome": "Alanys fogaça",
-    "subtitulo": "Nail Designer Especialista",
+    "subtitulo": "Nail Designer",
     "whatsapp": "5515981562921",
     "instagram": "alanysfogaca_nails",
     "cidade": "Sorocaba - SP · Atendimento com hora marcada",
