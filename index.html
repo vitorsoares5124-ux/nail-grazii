@@ -2178,13 +2178,15 @@
 
 <!-- ─── CARREGAMENTO DE CONFIGURAÇÃO E PARÂMETROS DINÂMICOS ─── -->
 <script src="config.js"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/supabase-cliente.js"></script>
 <script>
   // ─── ENGINE DINÂMICO COMPLETO (CONFIG.JS + PREVIEW LIVE + URL PARAMETERS) ───
-  (function initDynamicProfile() {
+  function initDynamicProfile() {
     const urlParams = new URLSearchParams(window.location.search);
     
     // Suporte para config.js, live preview do painel e URL parameters
-    let cfg = (typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {};
+    let cfg = (window.NAIL_SLUG_CONFIG) || ((typeof SITE_CONFIG !== 'undefined') ? SITE_CONFIG : {});
     
     // Se estiver em modo de teste vindo do painel admin.html
     // Só usa o preview do localStorage caso o token (pv) bata com o último
@@ -2470,6 +2472,32 @@
         }
       });
     }
+  }
+
+  /* ─── CARREGAMENTO: RAIZ BUSCA O CONFIG PUBLICADO NO SUPABASE ─── */
+  (function nailBoot() {
+    var params = new URLSearchParams(window.location.search);
+    var isPreview = params.get('preview') === 'live' && params.get('pv');
+    // Slug exibido na raiz: vem de ?slug= ou usa o perfil principal (NAIL_SLUG_RAIZ)
+    var slug = params.get('slug') || window.NAIL_SLUG_RAIZ || 'graziele';
+
+    // Preview ao vivo vindo do painel admin (usa o localStorage atual)
+    if (isPreview) { initDynamicProfile(); return; }
+
+    // Root pública: busca o config publicado no Supabase (site no ar na hora).
+    // Se o perfil nunca foi publicado, cai no config.js local (comportamento clássico).
+    if (slug && window.carregarPerfilSupabase) {
+      window.carregarPerfilSupabase(slug).then(function (cfg) {
+        if (cfg) window.NAIL_SLUG_CONFIG = cfg;
+        initDynamicProfile();
+      }).catch(function () {
+        initDynamicProfile();
+      });
+      return;
+    }
+
+    // Sem slug / sem Supabase: comportamento clássico (config.js local)
+    initDynamicProfile();
   })();
 
   /* ── ENVIO WHATSAPP COM NÚMERO DINÂMICO ── */

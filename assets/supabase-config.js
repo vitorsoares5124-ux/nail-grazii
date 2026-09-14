@@ -14,3 +14,9 @@ window.NAIL_SUPABASE = {
 // Ex.: "https://nail-grazii.vercel.app"
 // Usado para montar o link de cada profissional: SITE_URL/<slug>
 window.NAIL_SITE_URL = "https://allcancesite.vercel.app/";
+
+// Slug do perfil principal que aparece na RAIZ do site (https://allcancesite.vercel.app/).
+// Precisa bater com a chave do perfil no painel admin. Ex.: "graziele", "atelie"...
+// Quando você clica em "Salvar Perfil"/"Publicar agora" nesse perfil, o site da raiz
+// atualiza na hora (sem precisar de git/Vercel), porque ele busca o config no Supabase.
+window.NAIL_SLUG_RAIZ = "graziele";

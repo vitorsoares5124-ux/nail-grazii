@@ -2888,6 +2888,14 @@
     salvarPerfilSilencioso();
     const nome = document.getElementById('cfgNome')?.value || 'Perfil';
     mostrarToast(`Perfil "${nome}" e todas as fotos foram salvos!`);
+    publicarPerfilAtualSupabase().then((publicado) => {
+      const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (publicado) {
+        mostrarToast(`Perfil "${nome}" no ar (Supabase) ${hora}!`);
+      } else {
+        mostrarToast(`Perfil salvo, mas a publicação no Supabase falhou.`);
+      }
+    });
   }
 
   // Autosave com debounce a cada alteração em campos de texto, cores e selects
